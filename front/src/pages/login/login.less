@@ -1,0 +1,52 @@
+.container {
+  width: 400px;
+  height: 60%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border-radius: 2px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  background-color: #f1f1f1;
+}
+
+.form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  padding: 20px 32px;
+  .label {
+    margin-bottom: 48px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .labelTitle {
+    width: 60px;
+    white-space: nowrap;
+  }
+  .labelInput {
+    flex: 1;
+    min-width: 5px;
+  }
+  .btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    .btn {
+      flex: 1;
+      margin-right: 16px;
+      cursor: pointer;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}

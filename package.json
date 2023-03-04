@@ -1,0 +1,53 @@
+{
+  "name": "chartgpt",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node build/bin/www.mjs",
+    "dev": "cross-env DEBUG=koa-static ./node_modules/.bin/nodemon build/bin/www.mjs",
+    "develop": "ts-node --esm -T src/bin/www.mts",
+    "config": "ts-node --showConfig",
+    "prd": "pm2 start build/bin/www.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-ts": "tsc",
+    "copy-static": "node src/copyStatic.mjs",
+    "build": "npm run build-ts && npm run copy-static"
+  },
+  "dependencies": {
+    "@koa/router": "^12.0.0",
+    "@types/debug": "^4.1.7",
+    "@types/koa": "^2.13.5",
+    "@types/koa-bodyparser": "^4.3.10",
+    "@types/koa-conditional-get": "^2.0.0",
+    "@types/koa-etag": "^3.0.0",
+    "@types/koa-json": "^2.0.20",
+    "@types/koa-logger": "^3.1.2",
+    "@types/koa-static": "^4.0.2",
+    "@types/koa__router": "^12.0.0",
+    "@types/node": "^18.14.0",
+    "abortcontroller-polyfill": "^1.7.5",
+    "chatgpt": "",
+    "debug": "^4.1.1",
+    "koa": "^2.7.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-convert": "^1.2.0",
+    "koa-etag": "^3.0.0",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.0",
+    "koa-onerror": "^4.1.0",
+    "koa-static": "^5.0.0",
+    "koa-views": "^6.2.0",
+    "koa2-history-api-fallback": "^0.1.0",
+    "node-fetch": "^3.3.0",
+    "pug": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/shelljs": "^0.8.11",
+    "cross-env": "^7.0.3",
+    "nodemon": "^1.19.1",
+    "shelljs": "^0.8.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  }
+}
