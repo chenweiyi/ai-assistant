@@ -10,6 +10,8 @@ import { ChatGPTAPI } from "chatgpt";
 import { OPENAI_API_KEY } from "../consts/key.mjs";
 import { CHATGPT_REQUEST_TIMEOUT } from "../consts/request.mjs";
 import { pushMessage, getClientIp } from "../utils/util.mjs";
+import proxy from "https-proxy-agent";
+import fetch, { RequestInfo, RequestInit } from "node-fetch";
 
 const chatgptApiMap = new Map();
 
@@ -25,6 +27,18 @@ export default class MessageController {
     if (!chatgptApiMap.get(ownerId)) {
       const api = new ChatGPTAPI({
         apiKey: OPENAI_API_KEY,
+        // @ts-ignore
+        fetch: (url, options = {}) => {
+          const defaultOptions = {
+            agent: proxy("http://127.0.0.1:33210"),
+          };
+          const mergedOptions = {
+            ...defaultOptions,
+            ...options,
+          };
+          // @ts-ignore
+          return fetch(url, mergedOptions);
+        },
         // markdown: false,
       });
       chatgptApiMap.set(ownerId, api);
