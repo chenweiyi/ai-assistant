@@ -4,5 +4,5 @@ node_modules
 build
 .umi
 
-src/consts/key.mts
+src/consts/key.mjs
 yarn-error.log

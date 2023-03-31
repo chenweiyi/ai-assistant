@@ -1,5 +1,5 @@
 # 一个 AI 助手
-
+这是一个AI项目，集成各种开放AI的能力，让AI为你干活。
 ## 项目介绍
 
 1. 目前仅仅接入了 chatgpt api，后面打算接入其他 ai，比如国产 ai。
@@ -7,7 +7,7 @@
 
 ## 必要文件
 
-1. 在`src/consts/`下面新建 key.mts, 提供`OPENAI_API_KEY`字段用于调用 openai api
+1. 在`src/consts/`下面新建 key.mjs, 提供`OPENAI_API_KEY`字段用于调用 openai api
 
 ## 如何开发？
 
@@ -18,4 +18,6 @@
 
 ## node 版本
 
-需要 node > 14 版本
+这是项目的后端， 需要 node > 14 版本
+
+

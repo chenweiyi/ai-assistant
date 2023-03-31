@@ -5,7 +5,6 @@ export interface MsgData {
   msg: string;
   ownerId: string;
   parentMessageId: string;
-  conversationId: string;
 }
 
 export const CHATGPT = {

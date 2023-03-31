@@ -5,7 +5,5 @@ declare namespace Answer {
     ownerName: string;
     content: string;
     id: string;
-    parentMessageId: string;
-    conversationId: string;
   };
 }

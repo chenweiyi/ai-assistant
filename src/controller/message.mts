@@ -9,9 +9,10 @@ import Koa from "koa";
 import { ChatGPTAPI } from "chatgpt";
 import { OPENAI_API_KEY } from "../consts/key.mjs";
 import { CHATGPT_REQUEST_TIMEOUT } from "../consts/request.mjs";
-import { pushMessage, getClientIp } from "../utils/util.mjs";
+// import { pushMessage, getClientIp } from "../utils/util.mjs";
 import proxy from "https-proxy-agent";
 import fetch, { RequestInfo, RequestInit } from "node-fetch";
+import { PROXY_ADDRESS, ENABLE_PROXY } from "../consts/server.mjs";
 
 const chatgptApiMap = new Map();
 
@@ -22,15 +23,15 @@ export default class MessageController {
    * @param next
    */
   public static async sendMsg(ctx: Koa.Context) {
-    const { msg, ownerId, parentMessageId, conversationId } = ctx.request
+    const { msg, ownerId, parentMessageId } = ctx.request
       .body as any;
     if (!chatgptApiMap.get(ownerId)) {
       const api = new ChatGPTAPI({
         apiKey: OPENAI_API_KEY,
         // @ts-ignore
-        fetch: (url, options = {}) => {
+        fetch: ENABLE_PROXY ? (url, options = {}) => {
           const defaultOptions = {
-            agent: proxy("http://127.0.0.1:33210"),
+            agent: proxy(PROXY_ADDRESS),
           };
           const mergedOptions = {
             ...defaultOptions,
@@ -38,8 +39,7 @@ export default class MessageController {
           };
           // @ts-ignore
           return fetch(url, mergedOptions);
-        },
-        // markdown: false,
+        } : undefined,
       });
       chatgptApiMap.set(ownerId, api);
     }
@@ -52,7 +52,6 @@ export default class MessageController {
         timeoutMs: CHATGPT_REQUEST_TIMEOUT,
         ...(parentMessageId
           ? {
-              conversationId,
               parentMessageId,
             }
           : {}),

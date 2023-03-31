@@ -12,7 +12,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-ts": "tsc",
     "copy-static": "node src/copyStatic.mjs",
-    "build": "npm run build-ts && npm run copy-static"
+    "build": "npm run build-ts && npm run copy-static",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@koa/router": "^12.0.0",
@@ -40,10 +41,12 @@
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.0",
     "koa2-history-api-fallback": "^0.1.0",
+    "lodash-es": "^4.17.21",
     "node-fetch": "^3.3.0",
     "pug": "^2.0.3"
   },
   "devDependencies": {
+    "@types/lodash-es": "^4.17.7",
     "@types/shelljs": "^0.8.11",
     "cross-env": "^7.0.3",
     "nodemon": "^1.19.1",

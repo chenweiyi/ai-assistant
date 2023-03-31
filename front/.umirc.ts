@@ -8,6 +8,9 @@ export default defineConfig({
   nodeModulesTransform: {
     type: "none",
   },
+  cssLoader: {
+    localsConvention: 'camelCase',
+  },
   routes: [
     { path: "/", redirect: "/ai/chatgpt" },
     {
@@ -28,7 +31,7 @@ export default defineConfig({
         {
           path: "/ai/chatgpt",
           name: "chatgpt",
-          component: "@/pages/ai/chatgpt",
+          component: "@/pages/ai/chatgpt/LayoutIndex",
         },
       ],
     },
