@@ -7,6 +7,7 @@
     "start": "node build/bin/www.mjs",
     "dev": "cross-env DEBUG=koa-static ./node_modules/.bin/nodemon build/bin/www.mjs",
     "develop": "ts-node --esm -T src/bin/www.mts",
+    "dev2": "nodemon --watch src/**/* -e mts --exec ts-node --esm -T src/bin/www.mts",
     "config": "ts-node --showConfig",
     "prd": "pm2 start build/bin/www.mjs",
     "test": "echo \"Error: no test specified\" && exit 1",
