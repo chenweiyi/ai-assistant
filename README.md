@@ -2,6 +2,9 @@
 这是一个AI项目，集成各种开放AI的能力。
 ## 项目介绍
 
+![截图](Screenshots/jietu.png)
+
+
 1. 目前仅仅接入了 chatgpt api，后面打算接入其他 ai，比如国产 ai。
 2. 前端使用 umijs, react, ts; 后端使用 koa，ts，后端也是用 ES module 方式去写
 
