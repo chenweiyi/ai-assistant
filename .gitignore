@@ -3,6 +3,8 @@
 node_modules
 build
 .umi
+.umi-production
+.umi-test
 
 src/consts/key.mjs
 yarn-error.log

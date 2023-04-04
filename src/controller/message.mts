@@ -8,7 +8,7 @@
 import Koa from "koa";
 import { ChatGPTAPI } from "chatgpt";
 import { OPENAI_API_KEY } from "../consts/key.mjs";
-import { CHATGPT_REQUEST_TIMEOUT } from "../consts/request.mjs";
+import { CHATGPT_REQUEST_TIMEOUT, ENABLE_REQUEST_STREAM } from "../consts/request.mjs";
 // import { pushMessage, getClientIp } from "../utils/util.mjs";
 import proxy from "https-proxy-agent";
 import fetch, { RequestInfo, RequestInit } from "node-fetch";
@@ -45,41 +45,49 @@ export default class MessageController {
     }
     const api = chatgptApiMap.get(ownerId);
     try {
-      let res = await api.sendMessage(msg, {
-        // onProgress: (partialResponse) => {
-        //   console.log('partial text:', partialResponse.text)
-        // },
-        timeoutMs: CHATGPT_REQUEST_TIMEOUT,
-        ...(parentMessageId
-          ? {
-              parentMessageId,
-            }
-          : {}),
-      });
-      // 推送消息
-      // pushMessage({
-      //   title: '[Success] Send message to ChatGPT',
-      //   desp: `
-      //     1. 问题: ${msg}
-      //     2. 答案: ${res.text.substring(0, 10) + '...'}
-      //     3. 客户端ip: ${getClientIp(ctx.req)}
-      //   `
-      // })
-
-      // console.log('== res:', res)
-      ctx.body = {
-        code: 200,
-        msg: "ok",
-        data: res,
-        success: true,
-      };
+      if (ENABLE_REQUEST_STREAM) {
+        let res = await api.sendMessage(msg, {
+          onProgress: (partialResponse) => {
+            ctx.body = {
+              code: 200,
+              msg: "ok",
+              data: partialResponse.text,
+              success: true,
+            };
+          },
+          timeoutMs: CHATGPT_REQUEST_TIMEOUT,
+          ...(parentMessageId
+            ? {
+                parentMessageId,
+              }
+            : {}),
+        });
+        ctx.body = {
+          code: 200,
+          msg: "ok",
+          data: res,
+          success: true,
+        };
+      } else {
+        let res = await api.sendMessage(msg, {
+          timeoutMs: CHATGPT_REQUEST_TIMEOUT,
+          ...(parentMessageId
+            ? {
+                parentMessageId,
+              }
+            : {}),
+        });
+  
+        // console.log('== res:', res)
+        ctx.body = {
+          code: 200,
+          msg: "ok",
+          data: res,
+          success: true,
+        };
+      }
     } catch (e: any) {
       console.log("Error:", e);
-      // 推送消息
-      // pushMessage({
-      //   title: '[Error] Send message to ChatGPT',
-      //   desp: e.message ?? '未知错误'
-      // })
       ctx.body = {
         code: 500,
         msg: e.message,

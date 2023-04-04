@@ -20,11 +20,10 @@ interface IChatContext {
 }
 
 const getOrder = (res: IConvasition[], index: number): number => {
-  const order = res.length;
-  if (res.find(r => r.order === order)) {
-    return getOrder(res, order + 1);
+  if (res.find(r => r.order === index)) {
+    return getOrder(res, index + 1);
   }
-  return order
+  return index;
 }
 
 const ChatContext = createContext<IChatContext>({
