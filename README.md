@@ -25,7 +25,10 @@ export const OPENAI_API_KEY = 'xxxx';
 
 ## node 版本
 
-项目的后端， 需要 node >= 18 版本。
-项目的前端， 需要 node = ^14 版本，因为前端框架不支持node高版本，后续优化这个问题。
+需要 node >= 18 版本
+
+## TODO
+- [ ] stream输出
+- [ ] chrome扩展
 
 

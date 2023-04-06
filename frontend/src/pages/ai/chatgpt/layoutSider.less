@@ -1,0 +1,108 @@
+
+
+.layout-ai-slider {
+  position: relative;
+  flex: 0 0 250px;
+  height: 100vh;
+  padding: 74px 8px 8px;
+  background-color:#1d1e20 ;
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;
+  max-width: 250px;
+  overflow-x: hidden;
+  overflow-y: overlay;
+
+  /*定义整个滚动条高宽及背景：高宽分别对应横竖滚动条的尺寸*/
+  &::-webkit-scrollbar
+  {
+      width:5px;
+      background-color:#1d1e20;
+  }
+  /*定义滚动条轨道：内阴影+圆角*/
+  &::-webkit-scrollbar-track
+  {
+      background-color:#1d1e20;
+      padding: 0 2px;
+  }
+  /*定义滑块：内阴影+圆角*/
+  &::-webkit-scrollbar-thumb
+  {
+      border-radius:5px;
+      background-color:#666;
+  }
+
+}
+
+.topDiv {
+  position: fixed;
+  z-index: 10;
+  top: 8px;
+  left: 8px;
+  width: 234px;
+  height: 42px;
+  border: 2px solid #bbb;
+  border-radius: 8px;
+  padding: 8px;
+
+  :global {
+    button {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      border-width: 0px;
+      cursor: pointer;
+      color: #fff;
+    }
+  }
+}
+
+.menus-ul {
+  width: 100%;
+  height: fit-content;
+  padding: 0px;
+  list-style: none;
+}
+
+.menus-li {
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  padding: 12px 8px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  &:hover {
+    background-color: #2d2e30;
+  }
+  &.active {
+    background-color: #2d2e30;
+  }
+}
+
+.li-title {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.li-btns {
+  width: 40px;
+  height: 40px;
+  :global {
+    button {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      border-width: 0px;
+      cursor: pointer;
+      color: #fff;
+    }
+  }
+}
