@@ -11,6 +11,7 @@ import { CHATGPT } from '@/services/chatgpt';
 import styles from './chatgpt.less';
 import { useLatest } from 'ahooks';
 import { ChatContext } from '@/pages/ai/chatgpt/LayoutIndex'
+import qs from 'qs';
 
 type RequestOption = {
   msg: string;
@@ -61,6 +62,29 @@ export default function IndexPage() {
     setDisabled(false);
   }
 
+  /**
+   * 采用EventSource模式获取数据
+   * @param meta 
+   * @param sessionId 
+   */
+  async function getConstantMsg (meta: RequestOption, sessionId: string) {
+    const source = new EventSource(`/q/sendMsg/sse?${qs.stringify({
+      ownerId,
+      parentMessageId: getConvasitionBySessionId(sessionId)?.parentMessageId || '',
+      ...meta,
+    })}`);
+    source.addEventListener('open', () => {
+      console.log('EventSource Connected!!');
+    })
+    source.addEventListener('message', (e) => {
+      console.log('EventSource Message', e.data);
+    })
+    source.addEventListener('error', (e) => {
+      console.log('EventSource Error', e);
+    })
+
+  }
+
   // 输入框输入事件
   function changeInput(e: BaseSyntheticEvent) {
     setInputValue(e.target.value || '');
@@ -90,7 +114,7 @@ export default function IndexPage() {
         // 存储问题及loading
         setResultDataBySessionId({append: datas, isLoading: true}, sessionId);
         // 发送请求获取chatgpt的回复
-        getMsg({ msg: inputValue }, sessionId);
+        getConstantMsg({ msg: inputValue }, sessionId);
       }
       if (sessionId === active?.sessionId) {
         // 清空输入框
@@ -102,6 +126,7 @@ export default function IndexPage() {
   // 回车发送消息事件
   function inputKeyUpHandler(e: KeyboardEvent<HTMLInputElement>) {
     if (e.code === 'Enter') {
+      // sendMsg(active?.sessionId as string)();
       sendMsg(active?.sessionId as string)();
     }
   }
@@ -125,14 +150,14 @@ export default function IndexPage() {
       }
       // 存入loading数据
       setResultDataBySessionId({ append: [loading], isLoading: true }, active?.sessionId as string);
-      getMsg(
+      getConstantMsg(
         { msg: result[result.length - 1].content }, 
         active?.sessionId as string,
       );
     } 
 
     if (result[result.length - 1]?.type === 'loading' && active?.isLoading === false) {
-      getMsg(
+      getConstantMsg(
         { msg: result[result.length - 1].content }, 
         active?.sessionId as string,
       );

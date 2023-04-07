@@ -48,7 +48,7 @@ app.use(async (ctx, next) => {
 });
 
 app.use(
-  serve("front/dist/", {
+  serve("frontend/dist/", {
     // 设置cache-controll缓存时间
     maxage: 1000 * 60 * 60 * 2,
     // index.html禁止缓存

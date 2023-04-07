@@ -1,1 +1,1 @@
-export const ENABLE_REQUEST_STREAM = false;
+export const ENABLE_REQUEST_STREAM = true;

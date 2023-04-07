@@ -28,6 +28,7 @@
     "@types/koa-static": "^4.0.2",
     "@types/koa__router": "^12.0.0",
     "@types/node": "^18.14.0",
+    "@types/qs": "^6.9.7",
     "abortcontroller-polyfill": "^1.7.5",
     "chatgpt": "^5.0.6",
     "debug": "^4.1.1",
@@ -44,7 +45,8 @@
     "koa2-history-api-fallback": "^0.1.0",
     "lodash-es": "^4.17.21",
     "node-fetch": "^3.3.0",
-    "pug": "^2.0.3"
+    "pug": "^2.0.3",
+    "qs": "^6.11.1"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.7",
