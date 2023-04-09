@@ -10,21 +10,26 @@ import {
 import { CHATGPT } from '@/services/chatgpt';
 import styles from './chatgpt.less';
 import { useLatest } from 'ahooks';
-import { ChatContext } from '@/pages/ai/chatgpt/LayoutIndex'
+import { ChatContext } from '@/pages/ai/chatgpt/LayoutIndex';
 import qs from 'qs';
 
 type RequestOption = {
   msg: string;
 };
 
-
 // TODO
 const ownerId = 'chenwy';
 const ownerName = 'xiaochen';
 
 export default function IndexPage() {
-  const { active, setResultDataBySessionId, setResultBySessionId, storageData, getConvasitionBySessionId } = useContext(ChatContext);
-  
+  const {
+    active,
+    setResultDataBySessionId,
+    setResultBySessionId,
+    storageData,
+    getConvasitionBySessionId,
+  } = useContext(ChatContext);
+
   const result = active?.data || [];
   const [inputValue, setInputValue] = useState('');
   const [disabled, setDisabled] = useState(false);
@@ -37,14 +42,16 @@ export default function IndexPage() {
     setDisabled(true);
     const { code, data, msg } = await CHATGPT.sendMsg({
       ownerId,
-      parentMessageId: getConvasitionBySessionId(sessionId)?.parentMessageId || '',
+      parentMessageId:
+        getConvasitionBySessionId(sessionId)?.parentMessageId || '',
       ...meta,
     });
-    
+
     if (code === 200) {
       const convasition = getConvasitionBySessionId(sessionId);
       console.log('convasition.data', convasition?.data ?? []);
-      const newData = convasition?.data.filter(d => d.type !== 'loading') ?? [];
+      const newData =
+        convasition?.data.filter((d) => d.type !== 'loading') ?? [];
       const newAnswer = {
         type: 'answer' as 'answer',
         ownerId,
@@ -52,10 +59,13 @@ export default function IndexPage() {
         content: data.text,
         id: data.id,
       };
-      console.log('getMsg...')
+      console.log('getMsg...');
       newData.push(newAnswer);
       // 存储回复，去掉上一个loading,并存储parentMessageId
-      setResultBySessionId({ data: newData, parentMessageId: data.id, isLoading: false }, sessionId);
+      setResultBySessionId(
+        { data: newData, parentMessageId: data.id, isLoading: false },
+        sessionId,
+      );
     } else {
       alert(msg);
     }
@@ -64,25 +74,43 @@ export default function IndexPage() {
 
   /**
    * 采用EventSource模式获取数据
-   * @param meta 
-   * @param sessionId 
+   * @param meta
+   * @param sessionId
    */
-  async function getConstantMsg (meta: RequestOption, sessionId: string) {
-    const source = new EventSource(`/q/sendMsg/sse?${qs.stringify({
-      ownerId,
-      parentMessageId: getConvasitionBySessionId(sessionId)?.parentMessageId || '',
-      ...meta,
-    })}`);
-    source.addEventListener('open', () => {
-      console.log('EventSource Connected!!');
-    })
-    source.addEventListener('message', (e) => {
-      console.log('EventSource Message', e.data);
-    })
-    source.addEventListener('error', (e) => {
-      console.log('EventSource Error', e);
-    })
+  async function getConstantMsg(meta: RequestOption, sessionId: string) {
+    const source = new EventSource(
+      `/q/sendMsg/sse?${qs.stringify({
+        ownerId,
+        parentMessageId:
+          getConvasitionBySessionId(sessionId)?.parentMessageId || '',
+        ...meta,
+      })}`,
+    );
+    source.addEventListener(
+      'open',
+      () => {
+        console.log('EventSource Connected!!');
+      },
+      false,
+    );
 
+    source.addEventListener(
+      'message',
+      (e) => {
+        console.log('EventSource Message', e.data);
+        if (JSON.parse(e.data).id > 10) {
+          source.close();
+        }
+      },
+      false,
+    );
+    source.addEventListener(
+      'error',
+      (e) => {
+        console.log('EventSource Error', e);
+      },
+      false,
+    );
   }
 
   // 输入框输入事件
@@ -109,10 +137,10 @@ export default function IndexPage() {
             ownerName,
             content: '',
             id: 'loading_' + Date.now(),
-          }
+          },
         ];
         // 存储问题及loading
-        setResultDataBySessionId({append: datas, isLoading: true}, sessionId);
+        setResultDataBySessionId({ append: datas, isLoading: true }, sessionId);
         // 发送请求获取chatgpt的回复
         getConstantMsg({ msg: inputValue }, sessionId);
       }
@@ -120,7 +148,7 @@ export default function IndexPage() {
         // 清空输入框
         setInputValue('');
       }
-    }
+    };
   }
 
   // 回车发送消息事件
@@ -147,21 +175,27 @@ export default function IndexPage() {
         content: '',
         id: 'loading_' + Date.now(),
         parentMessageId: '',
-      }
+      };
       // 存入loading数据
-      setResultDataBySessionId({ append: [loading], isLoading: true }, active?.sessionId as string);
-      getConstantMsg(
-        { msg: result[result.length - 1].content }, 
+      setResultDataBySessionId(
+        { append: [loading], isLoading: true },
         active?.sessionId as string,
       );
-    } 
+      getConstantMsg(
+        { msg: result[result.length - 1].content },
+        active?.sessionId as string,
+      );
+    }
 
-    if (result[result.length - 1]?.type === 'loading' && active?.isLoading === false) {
+    if (
+      result[result.length - 1]?.type === 'loading' &&
+      active?.isLoading === false
+    ) {
       getConstantMsg(
-        { msg: result[result.length - 1].content }, 
+        { msg: result[result.length - 1].content },
         active?.sessionId as string,
       );
-    } 
+    }
   }
 
   useEffect(() => {
@@ -172,16 +206,15 @@ export default function IndexPage() {
   useEffect(() => {
     focusInput();
     initialData();
-  }, [active?.sessionId])
+  }, [active?.sessionId]);
 
   useEffect(() => {
     storageData({
-      ...active as IConvasition,
+      ...(active as IConvasition),
       data: latestResultRef.current.filter((o) => o.type !== 'loading'),
     });
   }, [JSON.stringify(latestResultRef.current)]);
 
-  
   return (
     <div className={styles.container}>
       <div className={styles.card}>
