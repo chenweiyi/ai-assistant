@@ -149,11 +149,24 @@ function LayoutIndex () {
     const convasition = newResult.find(r => r.sessionId === sessionId);
     if (index > -1) {
       newResult.splice(index, 1);
-      if (convasition?.active) {
+      if (convasition?.active && newResult[newResult.length - 1]) {
         newResult[newResult.length - 1].active = true;
       }
     }
-    setResult(newResult);
+    if (newResult.length) {
+      setResult(newResult);
+    } else {
+      const defaultData: IConvasition = {
+        sessionId: getRandomId(),
+        active: true,
+        title: '会话1',
+        order: 0,
+        data: [],
+        parentMessageId: '',
+        isLoading: false,
+      }
+      setResult([defaultData]);
+    }
   }
 
   function toggleActive (sessionId: string) {
