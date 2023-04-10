@@ -6,7 +6,7 @@
  */
 
 import Koa from "koa";
-import { ChatGPTAPI } from "chatgpt";
+import { ChatGPTAPI, ChatMessage } from "chatgpt";
 import { OPENAI_API_KEY } from "../consts/key.mjs";
 import {
   CHATGPT_REQUEST_TIMEOUT,
@@ -23,6 +23,8 @@ const chatgptApiMap = new Map<string, ChatGPTAPI>();
 
 const events = new EventEmitter();
 events.setMaxListeners(0);
+
+
 
 export default class MessageController {
   /**
@@ -87,25 +89,25 @@ export default class MessageController {
    */
   public static async sendMsgSSE(ctx: Koa.Context) {
     const { msg, ownerId, parentMessageId } = ctx.request.query as any;
-    // if (!chatgptApiMap.get(ownerId)) {
-    //   const api = new ChatGPTAPI({
-    //     apiKey: OPENAI_API_KEY,
-    //     // @ts-ignore
-    //     fetch: ENABLE_PROXY ? (url, options = {}) => {
-    //         const defaultOptions = {
-    //           agent: proxy(PROXY_ADDRESS),
-    //         };
-    //         const mergedOptions = {
-    //           ...defaultOptions,
-    //           ...options,
-    //         };
-    //         // @ts-ignore
-    //         return fetch(url, mergedOptions);
-    //       } : undefined,
-    //   });
-    //   chatgptApiMap.set(ownerId, api);
-    // }
-    // const api = chatgptApiMap.get(ownerId);
+    if (!chatgptApiMap.get(ownerId)) {
+      const api = new ChatGPTAPI({
+        apiKey: OPENAI_API_KEY,
+        // @ts-ignore
+        fetch: ENABLE_PROXY ? (url, options = {}) => {
+            const defaultOptions = {
+              agent: proxy(PROXY_ADDRESS),
+            };
+            const mergedOptions = {
+              ...defaultOptions,
+              ...options,
+            };
+            // @ts-ignore
+            return fetch(url, mergedOptions);
+          } : undefined,
+      });
+      chatgptApiMap.set(ownerId, api);
+    }
+    const api = chatgptApiMap.get(ownerId);
     try {
       console.log(" execute sendMsgSSE ...");
       ctx.req.socket.setTimeout(0);
@@ -120,49 +122,61 @@ export default class MessageController {
       ctx.status = 200;
       ctx.body = stream;
 
-      let timer;
+      // let timer;
 
-      const listener = (data) => {
-        stream.write(`data: ${data}\n\n`);
-
-        // 如果触发数据长度大于10，则不再发送数据
-        if (JSON.parse(data).id > 10) {
-          stream.end();
-        }
+      const listener = (str) => {
+        stream.write(`data: ${str}\n\n`);
+        // 如果触发完成条件，则不再发送数据
+        // if (JSON.parse(str).done) {
+        //   stream.end();
+        // }
       };
 
       events.on("data", listener);
 
-      // const res = await api.sendMessage(msg, {
-      //   onProgress: (partialResponse) => {
-      //     console.log("== onProgress response:", partialResponse.text.length > 50 ? partialResponse.text.slice(0, 50) + '...' : partialResponse.text);
-      //     events.emit('data', partialResponse.text);
-      //   },
-      //   timeoutMs: CHATGPT_REQUEST_TIMEOUT,
-      //   ...(parentMessageId
-      //     ? {
-      //         parentMessageId,
-      //       }
-      //     : {}),
-      // });
+      api.sendMessage(msg, {
+        onProgress: (partialResponse: ChatMessage) => {
+          const data = JSON.stringify({
+            text: partialResponse.text,
+            id: partialResponse.id,
+            done: false,
+          })
+          console.log("== onProgress response:", data);
+          events.emit('data', data);
+        },
+        timeoutMs: CHATGPT_REQUEST_TIMEOUT,
+        ...(parentMessageId
+          ? {
+              parentMessageId,
+            }
+          : {}),
+      }).then((res) => {
+        events.emit('data', JSON.stringify({
+          text: res.text,
+          id: res.id,
+          done: true,
+        }));
+        stream.end();
+      });
 
-      let i = 0;
-      let initData = i + "";
+      // let i = 0;
+      // let initData = i + "";
+      // const id = new Date().getTime() + '';
 
-      timer = setInterval(() => {
-        initData = i === 0 ? "0" : initData + i;
-        console.log("== emit data:", JSON.stringify({ data: initData, id: i }));
-        events.emit("data", JSON.stringify({ data: initData, id: i }));
-        i++;
-      }, 1000);
-
-      // events.emit('data', res.text);
+      // timer = setInterval(() => {
+      //   initData = i === 0 ? "0" : initData + i + '\n\n';
+        
+      //   console.log("== emit data:", JSON.stringify({ text: initData, id, done: i > 100 }));
+      //   events.emit("data", JSON.stringify({ text: initData, id, done: i > 100 }));
+      //   i++;
+      // }, 10);
 
       stream.on("close", () => {
         console.log("trigger on close");
-        clearInterval(timer);
+        // clearInterval(timer);
         events.off("data", listener);
       });
+
     } catch (e: any) {
       console.log("Error:", e);
       ctx.body = {

@@ -97,8 +97,44 @@ export default function IndexPage() {
     source.addEventListener(
       'message',
       (e) => {
-        console.log('EventSource Message', e.data);
-        if (JSON.parse(e.data).id > 10) {
+        const result = JSON.parse(e.data);
+        const convasition = getConvasitionBySessionId(sessionId);
+        console.log('=== result:', e.data);
+        const hasLoading = convasition?.data.some(d => d.type === 'loading');
+        
+        if (hasLoading) {
+          const newData = convasition?.data.filter(d => d.type !== 'loading') ?? [];
+          const newAnswer = {
+            type: 'answer' as 'answer',
+            ownerId,
+            ownerName,
+            content: result.text,
+            id: result.id,
+          }
+          newData.push(newAnswer);
+          // 存储回复，去掉上一个loading,并存储parentMessageId
+          setResultBySessionId(
+            { data: newData, parentMessageId: result.id, isLoading: false },
+            sessionId,
+          );
+        } else {
+          if (convasition?.data[convasition?.data.length - 1]?.type === 'answer') {
+            const newData = [...convasition?.data.slice(0, -1), {
+              type: 'answer' as 'answer',
+              ownerId,
+              ownerName,
+              content: result.text,
+              id: result.id,
+            }]
+            // 存储回复，去掉上一个loading,并存储parentMessageId
+            setResultBySessionId(
+              { data: newData, parentMessageId: result.id, isLoading: false },
+              sessionId,
+            );
+          }
+        }
+        
+        if (result.done) {
           source.close();
         }
       },
