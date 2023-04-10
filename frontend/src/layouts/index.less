@@ -28,3 +28,29 @@ body {
     transform: scale(1);
   }
 }
+
+@keyframes blink {
+  0% {
+    background-color: white;
+  }
+  50% {
+    background-color: black;
+  }
+  100% {
+    background-color: white;
+  }
+}
+
+.cursor-blingking {
+  &:after {
+    content: '';
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    margin-left:6px;
+    width: 2px;
+    height: 16px;
+    line-height: 16px;
+    animation: blink .8s infinite steps(1, start);
+  }
+}

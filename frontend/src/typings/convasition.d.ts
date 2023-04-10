@@ -6,4 +6,5 @@ interface IConvasition {
   data: Answer.answer[];
   parentMessageId: string;
   isLoading: boolean;
+  isInput: boolean;
 }

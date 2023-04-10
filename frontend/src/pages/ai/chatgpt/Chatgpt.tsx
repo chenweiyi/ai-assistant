@@ -31,6 +31,7 @@ export default function IndexPage() {
   } = useContext(ChatContext);
 
   const result = active?.data || [];
+  const isInput = active?.isInput || false;
   const [inputValue, setInputValue] = useState('');
   const [disabled, setDisabled] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -103,6 +104,7 @@ export default function IndexPage() {
         const hasLoading = convasition?.data.some(d => d.type === 'loading');
         
         if (hasLoading) {
+          // 去掉上一个loading
           const newData = convasition?.data.filter(d => d.type !== 'loading') ?? [];
           const newAnswer = {
             type: 'answer' as 'answer',
@@ -112,9 +114,9 @@ export default function IndexPage() {
             id: result.id,
           }
           newData.push(newAnswer);
-          // 存储回复，去掉上一个loading,并存储parentMessageId
+          // 存储回复,并存储parentMessageId, isInput, isLoading
           setResultBySessionId(
-            { data: newData, parentMessageId: result.id, isLoading: false },
+            { data: newData, parentMessageId: result.id, isInput: true, isLoading: false },
             sessionId,
           );
         } else {
@@ -126,15 +128,20 @@ export default function IndexPage() {
               content: result.text,
               id: result.id,
             }]
-            // 存储回复，去掉上一个loading,并存储parentMessageId
+            // 存储回复,并存储parentMessageId, isInput, isLoading
             setResultBySessionId(
-              { data: newData, parentMessageId: result.id, isLoading: false },
+              { data: newData, parentMessageId: result.id, isInput: true, isLoading: false },
               sessionId,
             );
           }
         }
         
         if (result.done) {
+          // 修改isInput的状态
+          setResultBySessionId(
+            { isInput: false },
+            sessionId,
+          );
           source.close();
         }
       },
@@ -254,7 +261,7 @@ export default function IndexPage() {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <AnswerLayout data={result} />
+        <AnswerLayout data={result} inputing={isInput} />
       </div>
       <div className={styles.questionWrapper}>
         <label className={styles.labelForInput}>

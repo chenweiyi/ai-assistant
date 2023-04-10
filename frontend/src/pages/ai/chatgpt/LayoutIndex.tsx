@@ -78,6 +78,7 @@ function LayoutIndex () {
         data: [],
         parentMessageId: '',
         isLoading: false,
+        isInput: false,
       }
       setResult([defaultData]);
     }
@@ -135,6 +136,7 @@ function LayoutIndex () {
       data: [],
       parentMessageId: '',
       isLoading: false,
+      isInput: false,
     }
     newResult.forEach((item) => {
       item.active = false;
@@ -164,6 +166,7 @@ function LayoutIndex () {
         data: [],
         parentMessageId: '',
         isLoading: false,
+        isInput: false,
       }
       setResult([defaultData]);
     }

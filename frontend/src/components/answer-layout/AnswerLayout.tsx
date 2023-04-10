@@ -5,6 +5,7 @@ import styles from './answerLayout.less';
 
 type AnswerLayoutProps = {
   data: Answer.answer[];
+  inputing: boolean;
 };
 
 export default function AnswerLayout(props: AnswerLayoutProps) {
@@ -21,16 +22,19 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
     }
   });
 
-  function generateContent(obj: Answer.answer) {
+  function generateContent(obj: Answer.answer, index: number) {
     if (obj.type === 'answer') {
-      return obj.content.split(/(\n|\r|\r\n)/).map((o, i) => (
+      const paragraph = obj.content.split(/(\n|\r|\r\n)/)
+      return paragraph.map((o, i) => (
         // <p
         //   key={i}
         //   dangerouslySetInnerHTML={{
         //     __html: /^\s$/.test(o) ? '' : o.replace(/\s/g, '&nbsp;'),
         //   }}
         // />
-        <p key={i}>{/^\s$/.test(o) ? '' : o.replace(/\s/g, ' ')}</p>
+        <p className={props.inputing && (i === paragraph.length - 1) && (index === props.data.length - 1) ? 'cursor-blingking' : '' }  
+          key={i}>{/^\s$/.test(o) ? '' : o.replace(/\s/g, ' ')}</p>
+        // <p className='cursor-blingking'  key={i}>{/^\s$/.test(o) ? '' : o.replace(/\s/g, ' ')}</p>
       ));
     } else if (obj.type === 'question') {
       return obj.content;
@@ -39,23 +43,23 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
     }
   }
 
-  function generateContentWrap(obj: Answer.answer) {
+  function generateContentWrap(obj: Answer.answer, index: number) {
     if (obj.type === 'answer' || obj.type === 'question') {
       return (
         <>
           <div className={styles.triangle}></div>
-          {generateContent(obj)}
+          {generateContent(obj, index)}
         </>
       );
     } else if (obj.type === 'loading') {
-      return generateContent(obj);
+      return generateContent(obj, index);
     }
   }
 
   return (
     <div className={styles.container} ref={ref}>
       <ul className={styles.ul}>
-        {props.data.map((item) => {
+        {props.data.map((item, index) => {
           return (
             <li key={item.id} className={styles.answerItem}>
               <div
@@ -68,7 +72,7 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
                   {item.type === 'question' && <span>我</span>}
                 </span>
                 <div className={styles.content}>
-                  {generateContentWrap(item)}
+                  {generateContentWrap(item, index)}
                 </div>
               </div>
             </li>
