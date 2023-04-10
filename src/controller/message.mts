@@ -24,8 +24,6 @@ const chatgptApiMap = new Map<string, ChatGPTAPI>();
 const events = new EventEmitter();
 events.setMaxListeners(0);
 
-
-
 export default class MessageController {
   /**
    * 获取chatgpt消息
