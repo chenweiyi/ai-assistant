@@ -7,7 +7,6 @@ frontend/config/config.local.ts
 frontend/.umi
 frontend/.umi-production
 frontend/.umi-test
-frontend/dist
 frontend/.mfsu
 frontend/.swc
 

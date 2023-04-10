@@ -139,7 +139,7 @@ export default class MessageController {
             id: partialResponse.id,
             done: false,
           })
-          console.log("== onProgress response:", data);
+          // console.log("== onProgress response:", data);
           events.emit('data', data);
         },
         timeoutMs: CHATGPT_REQUEST_TIMEOUT,
