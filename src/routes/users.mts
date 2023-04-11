@@ -1,14 +1,15 @@
-import Router from "@koa/router";
-const router = new Router();
+import Router from '@koa/router'
 
-router.prefix("/users");
+const router = new Router()
 
-router.get("/", function (ctx, next) {
-  ctx.body = "this is a users response!";
-});
+router.prefix('/users')
 
-router.get("/bar", function (ctx, next) {
-  ctx.body = "this is a users/bar response";
-});
+router.get('/', function (ctx, next) {
+  ctx.body = 'this is a users response!'
+})
 
-export default router;
+router.get('/bar', function (ctx, next) {
+  ctx.body = 'this is a users/bar response'
+})
+
+export default router

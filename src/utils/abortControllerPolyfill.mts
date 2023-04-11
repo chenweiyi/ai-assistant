@@ -1,1 +1,1 @@
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch.js';
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch.js'

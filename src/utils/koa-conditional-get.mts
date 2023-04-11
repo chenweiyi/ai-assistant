@@ -1,4 +1,5 @@
-import Koa from "koa";
+import Koa from 'koa'
+
 /**
  * Expose `conditional`.
  *
@@ -10,11 +11,11 @@ import Koa from "koa";
 
 export default function conditional() {
   return async function (ctx: Koa.Context, next: () => Promise<any>) {
-    await next();
+    await next()
 
     if (ctx.fresh) {
-      ctx.status = 304;
-      ctx.body = null;
+      ctx.status = 304
+      ctx.body = null
     }
-  };
+  }
 }

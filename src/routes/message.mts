@@ -1,11 +1,11 @@
-import RouterEngine from "@koa/router";
-import MessageController from "../controller/message.mjs";
+import RouterEngine from '@koa/router'
 
-const router = new RouterEngine();
+import MessageController from '../controller/message.mjs'
 
-router.prefix("/q");
+const router = new RouterEngine()
 
-router.post("/sendMsg", MessageController.sendMsg);
-router.all("/sendMsg/sse", MessageController.sendMsgSSE);
+router.prefix('/q')
 
-export default router;
+router.all('/sendMsg/sse', MessageController.sendMsgSSE)
+
+export default router

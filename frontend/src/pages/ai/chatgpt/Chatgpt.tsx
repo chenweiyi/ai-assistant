@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import { CHATGPT } from '@/services/chatgpt';
 import styles from './chatgpt.less';
 import { useLatest } from 'ahooks';
 import { ChatContext } from '@/pages/ai/chatgpt/LayoutIndex';
