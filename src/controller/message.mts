@@ -32,28 +32,29 @@ export default class MessageController {
    */
   public static async sendMsg(ctx: Koa.Context) {
     const { msg, ownerId, parentMessageId } = ctx.request.body as any;
-    if (!chatgptApiMap.get(ownerId)) {
-      const api = new ChatGPTAPI({
-        apiKey: OPENAI_API_KEY,
-        // @ts-ignore
-        fetch: ENABLE_PROXY
-          ? (url, options = {}) => {
-              const defaultOptions = {
-                agent: proxy(PROXY_ADDRESS),
-              };
-              const mergedOptions = {
-                ...defaultOptions,
-                ...options,
-              };
-              // @ts-ignore
-              return fetch(url, mergedOptions);
-            }
-          : undefined,
-      });
-      chatgptApiMap.set(ownerId, api);
-    }
-    const api = chatgptApiMap.get(ownerId);
     try {
+      if (!chatgptApiMap.get(ownerId)) {
+        const api = new ChatGPTAPI({
+          apiKey: OPENAI_API_KEY,
+          // @ts-ignore
+          fetch: ENABLE_PROXY
+            ? (url, options = {}) => {
+                const defaultOptions = {
+                  agent: proxy(PROXY_ADDRESS),
+                };
+                const mergedOptions = {
+                  ...defaultOptions,
+                  ...options,
+                };
+                // @ts-ignore
+                return fetch(url, mergedOptions);
+              }
+            : undefined,
+        });
+        chatgptApiMap.set(ownerId, api);
+      }
+      const api = chatgptApiMap.get(ownerId);
+   
       let res = await api.sendMessage(msg, {
         timeoutMs: CHATGPT_REQUEST_TIMEOUT,
         ...(parentMessageId
@@ -106,6 +107,15 @@ export default class MessageController {
       chatgptApiMap.set(ownerId, api);
     }
     const api = chatgptApiMap.get(ownerId);
+    const stream = new PassThrough();
+    const listener = (str) => {
+      stream.write(`data: ${str}\n\n`);
+    };
+    events.on("data", listener);
+    stream.on("close", () => {
+      console.log("trigger on close");
+      events.off("data", listener);
+    });
     try {
       console.log(" execute sendMsgSSE ...");
       ctx.req.socket.setTimeout(0);
@@ -116,30 +126,18 @@ export default class MessageController {
         "Cache-Control": "no-cache, no-transform",
         Connection: "keep-alive",
       });
-      const stream = new PassThrough();
+      
       ctx.status = 200;
       ctx.body = stream;
-
-      // let timer;
-
-      const listener = (str) => {
-        stream.write(`data: ${str}\n\n`);
-        // 如果触发完成条件，则不再发送数据
-        // if (JSON.parse(str).done) {
-        //   stream.end();
-        // }
-      };
-
-      events.on("data", listener);
-
+      
       api.sendMessage(msg, {
         onProgress: (partialResponse: ChatMessage) => {
           const data = JSON.stringify({
             text: partialResponse.text,
             id: partialResponse.id,
             done: false,
+            error: false,
           })
-          // console.log("== onProgress response:", data);
           events.emit('data', data);
         },
         timeoutMs: CHATGPT_REQUEST_TIMEOUT,
@@ -153,36 +151,29 @@ export default class MessageController {
           text: res.text,
           id: res.id,
           done: true,
+          error: false,
+        }));
+        stream.end();
+      }).catch(e => {
+        console.log('== error, error type:', typeof e, e.message)
+        events.emit('data', JSON.stringify({
+          text: e.message,
+          id: 'error-' + new Date().getTime() + '',
+          done: true,
+          error: true,
         }));
         stream.end();
       });
-
-      // let i = 0;
-      // let initData = i + "";
-      // const id = new Date().getTime() + '';
-
-      // timer = setInterval(() => {
-      //   initData = i === 0 ? "0" : initData + i + '\n\n';
-        
-      //   console.log("== emit data:", JSON.stringify({ text: initData, id, done: i > 100 }));
-      //   events.emit("data", JSON.stringify({ text: initData, id, done: i > 100 }));
-      //   i++;
-      // }, 10);
-
-      stream.on("close", () => {
-        console.log("trigger on close");
-        // clearInterval(timer);
-        events.off("data", listener);
-      });
-
     } catch (e: any) {
       console.log("Error:", e);
-      ctx.body = {
-        code: 500,
-        msg: e.message,
-        data: e,
-        success: false,
-      };
+      ctx.body = stream;
+      events.emit('data', JSON.stringify({
+        text: e.message ?? 'server inner error',
+        id: 'error-' + new Date().getTime() + '',
+        done: true,
+        error: true,
+      }));
+      stream.end();
     }
   }
 }

@@ -95,13 +95,13 @@ function LayoutIndex () {
           ...{data: newData, isLoading: appendData.isLoading},
         }
       }
-      return item;
+      return {...item};
     });
     setResult(res);
   }
 
   function setResultBySessionId (params: Partial<IConvasition>, sessionId: string) {
-    console.log('-- setResultBySessionId result', latestResultRef.current, params);
+    console.log('-- setResultBySessionId result', latestResultRef.current, params, sessionId);
     const res = latestResultRef.current.map((item) => {
       if (item.sessionId === sessionId) {
         return {
@@ -109,7 +109,7 @@ function LayoutIndex () {
           ...params,
         }
       }
-      return item;
+      return {...item};
     });
     setResult(res);
   }

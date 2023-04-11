@@ -38,41 +38,6 @@ export default function IndexPage() {
 
   const latestResultRef = useLatest(result);
 
-  // 发送消息请求
-  async function getMsg(meta: RequestOption, sessionId: string) {
-    setDisabled(true);
-    const { code, data, msg } = await CHATGPT.sendMsg({
-      ownerId,
-      parentMessageId:
-        getConvasitionBySessionId(sessionId)?.parentMessageId || '',
-      ...meta,
-    });
-
-    if (code === 200) {
-      const convasition = getConvasitionBySessionId(sessionId);
-      console.log('convasition.data', convasition?.data ?? []);
-      const newData =
-        convasition?.data.filter((d) => d.type !== 'loading') ?? [];
-      const newAnswer = {
-        type: 'answer' as 'answer',
-        ownerId,
-        ownerName,
-        content: data.text,
-        id: data.id,
-      };
-      console.log('getMsg...');
-      newData.push(newAnswer);
-      // 存储回复，去掉上一个loading,并存储parentMessageId
-      setResultBySessionId(
-        { data: newData, parentMessageId: data.id, isLoading: false },
-        sessionId,
-      );
-    } else {
-      alert(msg);
-    }
-    setDisabled(false);
-  }
-
   /**
    * 采用EventSource模式获取数据
    * @param meta
@@ -112,13 +77,19 @@ export default function IndexPage() {
             ownerName,
             content: result.text,
             id: result.id,
+            error: result.error,
           }
           newData.push(newAnswer);
           // 存储回复,并存储parentMessageId, isInput, isLoading
           setResultBySessionId(
-            { data: newData, parentMessageId: result.id, isInput: true, isLoading: false },
+            { data: newData, parentMessageId: result.error ? '' : result.id, isInput: !result.error, isLoading: false },
             sessionId,
           );
+          // 如果是error数据,则关闭EventSource
+          if (result.error && result.done) {
+            source.close();
+            return;
+          }
         } else {
           if (convasition?.data[convasition?.data.length - 1]?.type === 'answer') {
             const newData = [...convasition?.data.slice(0, -1), {
@@ -127,19 +98,24 @@ export default function IndexPage() {
               ownerName,
               content: result.text,
               id: result.id,
+              error: result.error,
             }]
             // 存储回复,并存储parentMessageId, isInput, isLoading
             setResultBySessionId(
-              { data: newData, parentMessageId: result.id, isInput: true, isLoading: false },
+              { data: newData, parentMessageId: result.error ? '' : result.id, isInput: !result.error, isLoading: false },
               sessionId,
             );
+            // 如果是error数据,则关闭EventSource
+            if (result.error) {
+              source.close();
+            }
           }
         }
         
         if (result.done) {
           // 修改isInput的状态
           setResultBySessionId(
-            { isInput: false },
+            { isInput: false, isLoading: false },
             sessionId,
           );
           source.close();
@@ -176,8 +152,6 @@ export default function IndexPage() {
           },
           {
             type: 'loading' as 'loading',
-            ownerId,
-            ownerName,
             content: '',
             id: 'loading_' + Date.now(),
           },
@@ -210,32 +184,21 @@ export default function IndexPage() {
 
   // 初始化数据,如果最后一条数据是问题,则发送请求获取chatgpt的回复
   function initialData() {
-    if (result[result.length - 1]?.type === 'question') {
+    const last = result[result.length - 1];
+    if (last?.type === 'question') {
       const loading = {
         type: 'loading' as 'loading',
-        ownerId,
-        ownerName,
-        content: '',
         id: 'loading_' + Date.now(),
-        parentMessageId: '',
+        content: '',
       };
       // 存入loading数据
       setResultDataBySessionId(
         { append: [loading], isLoading: true },
         active?.sessionId as string,
       );
+      // 发送请求获取chatgpt的回复
       getConstantMsg(
-        { msg: result[result.length - 1].content },
-        active?.sessionId as string,
-      );
-    }
-
-    if (
-      result[result.length - 1]?.type === 'loading' &&
-      active?.isLoading === false
-    ) {
-      getConstantMsg(
-        { msg: result[result.length - 1].content },
+        { msg: last.content },
         active?.sessionId as string,
       );
     }

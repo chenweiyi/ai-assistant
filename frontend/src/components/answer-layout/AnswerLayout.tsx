@@ -26,15 +26,12 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
     if (obj.type === 'answer') {
       const paragraph = obj.content.split(/(\n|\r|\r\n)/)
       return paragraph.map((o, i) => (
-        // <p
-        //   key={i}
-        //   dangerouslySetInnerHTML={{
-        //     __html: /^\s$/.test(o) ? '' : o.replace(/\s/g, '&nbsp;'),
-        //   }}
-        // />
-        <p className={props.inputing && (i === paragraph.length - 1) && (index === props.data.length - 1) ? 'cursor-blingking' : '' }  
-          key={i}>{/^\s$/.test(o) ? '' : o.replace(/\s/g, ' ')}</p>
-        // <p className='cursor-blingking'  key={i}>{/^\s$/.test(o) ? '' : o.replace(/\s/g, ' ')}</p>
+        <p className={clsx(
+          obj.error ? styles.answerError : '',
+          props.inputing && (i === paragraph.length - 1) && (index === props.data.length - 1) ? 'cursor-blingking' : '',
+        )}  
+          key={i}>{/^\s$/.test(o) ? '' : o.replace(/\s/g, ' ')}
+        </p>
       ));
     } else if (obj.type === 'question') {
       return obj.content;
