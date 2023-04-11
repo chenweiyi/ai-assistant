@@ -2,12 +2,8 @@
   "delay": 1000,
   "verbose": true,
   "colours": false,
-  "watch": [
-    "./src"
-  ],
-  "ignore": [
-    "./src/@types"
-  ],
+  "watch": ["./src", "./package.json", "./tsconfig.json"],
+  "ignore": ["./src/@types"],
   "execMap": {
     "ts": "ts-node",
     "mts": "ts-node --esm -T"

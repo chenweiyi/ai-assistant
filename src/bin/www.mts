@@ -11,7 +11,7 @@ import { SERVER_PORT } from '../consts/server.mjs'
 import '../utils/abortControllerPolyfill.mjs'
 import '../utils/fetchPolyfill.mjs'
 
-let debug = debugLibrary('demo:server')
+const debug = debugLibrary('server')
 
 /**
  * Get port from environment and store in Express.

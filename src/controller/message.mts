@@ -5,6 +5,7 @@
  * @Last Modified time: 2023-02-21 15:54:08
  */
 import { ChatGPTAPI, ChatMessage } from 'chatgpt'
+import debugLibrary from 'debug'
 import { EventEmitter } from 'events'
 import proxy from 'https-proxy-agent'
 import Koa from 'koa'
@@ -15,6 +16,7 @@ import { OPENAI_API_KEY } from '../consts/key.mjs'
 import { CHATGPT_REQUEST_TIMEOUT } from '../consts/request.mjs'
 import { ENABLE_PROXY, PROXY_ADDRESS } from '../consts/server.mjs'
 
+const debug = debugLibrary('message')
 const chatgptApiMap = new Map<string, ChatGPTAPI>()
 
 const events = new EventEmitter()
@@ -54,11 +56,11 @@ export default class MessageController {
     }
     events.on('data', listener)
     stream.on('close', () => {
-      console.log('trigger on close')
+      debug('trigger on close')
       events.off('data', listener)
     })
     try {
-      console.log(' execute sendMsgSSE ...')
+      debug('execute sendMsgSSE ...')
       ctx.req.socket.setTimeout(0)
       ctx.req.socket.setNoDelay(true)
       ctx.req.socket.setKeepAlive(true)
@@ -80,6 +82,7 @@ export default class MessageController {
               done: false,
               error: false
             })
+            debug('onProgress data:', data)
             events.emit('data', data)
           },
           timeoutMs: CHATGPT_REQUEST_TIMEOUT,
@@ -102,7 +105,7 @@ export default class MessageController {
           stream.end()
         })
         .catch((e) => {
-          console.log('== error, error type:', typeof e, e.message)
+          debug('request error', e.message)
           events.emit(
             'data',
             JSON.stringify({
@@ -115,7 +118,7 @@ export default class MessageController {
           stream.end()
         })
     } catch (e: any) {
-      console.log('Error:', e)
+      debug('catch error:', e)
       ctx.body = stream
       events.emit(
         'data',

@@ -17,6 +17,7 @@ interface IChatContext {
   toggleActive: (sessionId: string) => void,
   getConvasitionBySessionId: (sessionId: string) => IConvasition | undefined,
   setResultBySessionId: (params: Partial<IConvasition>, sessionId: string) => void,
+  getActiveResult: () => IConvasition | undefined,
 }
 
 const getOrder = (res: IConvasition[], index: number): number => {
@@ -37,6 +38,7 @@ const ChatContext = createContext<IChatContext>({
   toggleActive: () => {},
   getConvasitionBySessionId: () => undefined,
   setResultBySessionId: () => {},
+  getActiveResult: () => undefined,
 });
 
 
@@ -184,6 +186,10 @@ function LayoutIndex () {
     return latestResultRef.current.find(r => r.sessionId === sessionId);
   }
 
+  function getActiveResult () {
+    return latestResultRef.current.find(r => r.active);
+  }
+
   return (
     <ChatContext.Provider value={{
       result, 
@@ -196,6 +202,7 @@ function LayoutIndex () {
       toggleActive, 
       getConvasitionBySessionId,
       setResultBySessionId,
+      getActiveResult,
     }}>
       <div className={styles.layoutAi}>
         <LayoutSider />

@@ -1,3 +1,4 @@
+import debugLibrary from 'debug'
 import Koa from 'koa'
 import history from 'koa2-history-api-fallback'
 import bodyparser from 'koa-bodyparser'
@@ -12,6 +13,7 @@ import message from './routes/message.mjs'
 import conditional from './utils/koa-conditional-get.mjs'
 
 let app = new Koa()
+const debug = debugLibrary('app')
 
 // error handler
 onerror(app)
@@ -45,7 +47,7 @@ app.use(async (ctx, next) => {
   const start = new Date().getTime()
   await next()
   const ms = new Date().getTime() - start
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
+  debug(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
 app.use(
@@ -69,7 +71,7 @@ app.use(message.routes()).use(message.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
-  console.error('server error', err, ctx)
+  debug('server error', err, ctx)
 })
 
 export default app

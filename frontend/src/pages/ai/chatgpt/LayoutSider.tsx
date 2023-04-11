@@ -6,7 +6,7 @@ import { findLast } from 'lodash-es';
 
 export default function LayoutSider () {
 
-  const { result, addResult, deleteResult, toggleActive } = useContext(ChatContext);
+  const { result, addResult, deleteResult, toggleActive, getActiveResult } = useContext(ChatContext);
 
   function deleteItem (item: IConvasition) {
     return (e: SyntheticEvent) => {
@@ -15,11 +15,27 @@ export default function LayoutSider () {
     }
   }
 
+  function addResultHandler () {
+    const target = getActiveResult();
+    // 数据正在请求或输入中，请稍后再添加新回话
+    if (target?.isLoading || target?.isInput) {
+      window.alert('数据正在请求或输入中，请稍后再添加新回话');
+      return 
+    }
+    addResult();
+  }
+
   function toggle (sessionId: string) {
     return (e: SyntheticEvent) => {
       e.stopPropagation();
       const target = result.find(r => r.sessionId === sessionId);
+      // 点击当前激活页面，不做任何操作
       if (target?.active) return;
+      // 正在加载中的或者正在输入中的页面，不允许切换
+      if (target?.isLoading || target?.isInput) {
+        window.alert('正在加载中或者正在输入中，不能切换');
+        return 
+      }
       toggleActive(sessionId);
     }
   }
@@ -37,7 +53,7 @@ export default function LayoutSider () {
   return (
     <div className={styles.layoutAiSlider}>
       <div className={styles.topDiv}>
-        <button type="button" onClick={addResult}>+ 添加新会话</button>
+        <button type="button" onClick={addResultHandler}>+ 添加新会话</button>
       </div>
       <ul className={styles.menusUl}>
         {
