@@ -1,4 +1,7 @@
 node_modules
+build
+dist
 .husky
-frontend
-src/@types
+.umi
+.umi-production
+.DS_Store

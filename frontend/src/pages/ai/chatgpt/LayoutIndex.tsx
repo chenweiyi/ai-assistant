@@ -1,30 +1,43 @@
-import { useEffect, useState, createContext, Dispatch, SetStateAction } from "react";
-import LayoutSider from "./LayoutSider";
-import Chatgpt from "./Chatgpt";
-import { SESSION_STORAGE_CONVASITION_CHATGPT_KEY } from "@/constants/constant";
-import { getRandomId } from "@/utils/tools";
-import styles from './layoutIndex.less';
-import { useLatest } from "ahooks";
+import { SESSION_STORAGE_CONVASITION_CHATGPT_KEY } from '@/constants/constant'
+import { getRandomId } from '@/utils/tools'
+import { useLatest } from 'ahooks'
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useEffect,
+  useState
+} from 'react'
+
+import Chatgpt from './Chatgpt'
+import LayoutSider from './LayoutSider'
+import styles from './layoutIndex.less'
 
 interface IChatContext {
-  result: IConvasition[],
-  active: IConvasition | null,
-  setResult: Dispatch<SetStateAction<IConvasition[]>>,
-  setResultDataBySessionId: (appendData: { append: Array<Answer.answer>, isLoading: boolean }, sessionId: string) => void,
-  storageData: (data: IConvasition) => void,
-  addResult: () => void,
-  deleteResult: (sessionId: string) => void,
-  toggleActive: (sessionId: string) => void,
-  getConvasitionBySessionId: (sessionId: string) => IConvasition | undefined,
-  setResultBySessionId: (params: Partial<IConvasition>, sessionId: string) => void,
-  getActiveResult: () => IConvasition | undefined,
+  result: IConvasition[]
+  active: IConvasition | null
+  setResult: Dispatch<SetStateAction<IConvasition[]>>
+  setResultDataBySessionId: (
+    appendData: { append: Array<Answer.answer>; isLoading: boolean },
+    sessionId: string
+  ) => void
+  storageData: (data: IConvasition) => void
+  addResult: () => void
+  deleteResult: (sessionId: string) => void
+  toggleActive: (sessionId: string) => void
+  getConvasitionBySessionId: (sessionId: string) => IConvasition | undefined
+  setResultBySessionId: (
+    params: Partial<IConvasition>,
+    sessionId: string
+  ) => void
+  getActiveResult: () => IConvasition | undefined
 }
 
 const getOrder = (res: IConvasition[], index: number): number => {
-  if (res.find(r => r.order === index)) {
-    return getOrder(res, index + 1);
+  if (res.find((r) => r.order === index)) {
+    return getOrder(res, index + 1)
   }
-  return index;
+  return index
 }
 
 const ChatContext = createContext<IChatContext>({
@@ -38,39 +51,42 @@ const ChatContext = createContext<IChatContext>({
   toggleActive: () => {},
   getConvasitionBySessionId: () => undefined,
   setResultBySessionId: () => {},
-  getActiveResult: () => undefined,
-});
+  getActiveResult: () => undefined
+})
 
-
-function useGetActive (result: IConvasition[]) {
-  const [active, setActive] = useState<IConvasition | null>(getActive);
+function useGetActive(result: IConvasition[]) {
+  const [active, setActive] = useState<IConvasition | null>(getActive)
 
   function getActive() {
-    return result.find(r => r.active) ?? null
+    return result.find((r) => r.active) ?? null
   }
 
   useEffect(() => {
-    setActive(getActive());
+    setActive(getActive())
   }, [JSON.stringify(result)])
 
-  return active;
+  return active
 }
 
-function LayoutIndex () {
-  const [result, setResult] = useState<IConvasition[]>([]);
-  const active = useGetActive(result);
+function LayoutIndex() {
+  const [result, setResult] = useState<IConvasition[]>([])
+  const active = useGetActive(result)
 
-  const latestResultRef = useLatest(result);
-  
+  const latestResultRef = useLatest(result)
+
   useEffect(() => {
-    initialData();
-  }, []);
+    initialData()
+  }, [])
 
-  function initialData () {
-    const res = sessionStorage.getItem(SESSION_STORAGE_CONVASITION_CHATGPT_KEY);
+  function initialData() {
+    const res = sessionStorage.getItem(SESSION_STORAGE_CONVASITION_CHATGPT_KEY)
     if (res) {
-      const data: IConvasition[] = JSON.parse(res);
-      setResult(data);
+      const data: IConvasition[] = JSON.parse(res)
+      data.forEach((item) => {
+        // 初始化时，所有的tab都不需要正在输入态
+        item.isInput = false
+      })
+      setResult(data)
     } else {
       const defaultData: IConvasition = {
         sessionId: getRandomId(),
@@ -80,56 +96,74 @@ function LayoutIndex () {
         data: [],
         parentMessageId: '',
         isLoading: false,
-        isInput: false,
+        isInput: false
       }
-      setResult([defaultData]);
+      setResult([defaultData])
     }
   }
 
-  function setResultDataBySessionId (appendData: { append: Array<Answer.answer>, isLoading: boolean }, sessionId: string) {
-    console.log('-- setResultDataBySessionId result', latestResultRef.current, appendData);
+  function setResultDataBySessionId(
+    appendData: { append: Array<Answer.answer>; isLoading: boolean },
+    sessionId: string
+  ) {
+    console.log(
+      '-- setResultDataBySessionId result',
+      latestResultRef.current,
+      appendData
+    )
     const res = latestResultRef.current.map((item) => {
       if (item.sessionId === sessionId) {
-        const newData = [...item.data];
-        newData.push(...appendData.append);
+        const newData = [...item.data]
+        newData.push(...appendData.append)
         return {
           ...item,
-          ...{data: newData, isLoading: appendData.isLoading},
+          ...{ data: newData, isLoading: appendData.isLoading }
         }
       }
-      return {...item};
-    });
-    setResult(res);
+      return { ...item }
+    })
+    setResult(res)
   }
 
-  function setResultBySessionId (params: Partial<IConvasition>, sessionId: string) {
-    console.log('-- setResultBySessionId result', latestResultRef.current, params, sessionId);
+  function setResultBySessionId(
+    params: Partial<IConvasition>,
+    sessionId: string
+  ) {
+    console.log(
+      '-- setResultBySessionId result',
+      latestResultRef.current,
+      params,
+      sessionId
+    )
     const res = latestResultRef.current.map((item) => {
       if (item.sessionId === sessionId) {
         return {
           ...item,
-          ...params,
+          ...params
         }
       }
-      return {...item};
-    });
-    setResult(res);
+      return { ...item }
+    })
+    setResult(res)
   }
 
   function storageData(data: IConvasition) {
     // const res = latestResultRef.current.filter((o) => o.type !== 'loading');
-    const newResult = [...latestResultRef.current];
-    const index = newResult.findIndex(r => r.sessionId === data.sessionId);
+    const newResult = [...latestResultRef.current]
+    const index = newResult.findIndex((r) => r.sessionId === data.sessionId)
     if (index > -1) {
-      newResult[index] = data;
+      newResult[index] = data
     }
     if (newResult.length) {
-      sessionStorage.setItem(SESSION_STORAGE_CONVASITION_CHATGPT_KEY, JSON.stringify(newResult));
+      sessionStorage.setItem(
+        SESSION_STORAGE_CONVASITION_CHATGPT_KEY,
+        JSON.stringify(newResult)
+      )
     }
   }
 
-  function addResult () {
-    const newResult = [...latestResultRef.current];
+  function addResult() {
+    const newResult = [...latestResultRef.current]
     const newSession: IConvasition = {
       sessionId: getRandomId(),
       active: true,
@@ -138,27 +172,27 @@ function LayoutIndex () {
       data: [],
       parentMessageId: '',
       isLoading: false,
-      isInput: false,
+      isInput: false
     }
     newResult.forEach((item) => {
-      item.active = false;
-    });
-    newResult.push(newSession);
-    setResult(newResult);
+      item.active = false
+    })
+    newResult.push(newSession)
+    setResult(newResult)
   }
 
-  function deleteResult (sessionId: string) {
-    const newResult = [...latestResultRef.current];
-    const index = newResult.findIndex(r => r.sessionId === sessionId);
-    const convasition = newResult.find(r => r.sessionId === sessionId);
+  function deleteResult(sessionId: string) {
+    const newResult = [...latestResultRef.current]
+    const index = newResult.findIndex((r) => r.sessionId === sessionId)
+    const convasition = newResult.find((r) => r.sessionId === sessionId)
     if (index > -1) {
-      newResult.splice(index, 1);
+      newResult.splice(index, 1)
       if (convasition?.active && newResult[newResult.length - 1]) {
-        newResult[newResult.length - 1].active = true;
+        newResult[newResult.length - 1].active = true
       }
     }
     if (newResult.length) {
-      setResult(newResult);
+      setResult(newResult)
     } else {
       const defaultData: IConvasition = {
         sessionId: getRandomId(),
@@ -168,42 +202,44 @@ function LayoutIndex () {
         data: [],
         parentMessageId: '',
         isLoading: false,
-        isInput: false,
+        isInput: false
       }
-      setResult([defaultData]);
+      setResult([defaultData])
     }
   }
 
-  function toggleActive (sessionId: string) {
-    const newResult = [...latestResultRef.current];
+  function toggleActive(sessionId: string) {
+    const newResult = [...latestResultRef.current]
     newResult.forEach((item) => {
-      item.active = item.sessionId === sessionId;
-    });
-    setResult(newResult);
+      item.active = item.sessionId === sessionId
+    })
+    setResult(newResult)
   }
 
-  function getConvasitionBySessionId (sessionId: string) {
-    return latestResultRef.current.find(r => r.sessionId === sessionId);
+  function getConvasitionBySessionId(sessionId: string) {
+    return latestResultRef.current.find((r) => r.sessionId === sessionId)
   }
 
-  function getActiveResult () {
-    return latestResultRef.current.find(r => r.active);
+  function getActiveResult() {
+    return latestResultRef.current.find((r) => r.active)
   }
 
   return (
-    <ChatContext.Provider value={{
-      result, 
-      active, 
-      setResult, 
-      setResultDataBySessionId, 
-      storageData, 
-      addResult, 
-      deleteResult, 
-      toggleActive, 
-      getConvasitionBySessionId,
-      setResultBySessionId,
-      getActiveResult,
-    }}>
+    <ChatContext.Provider
+      value={{
+        result,
+        active,
+        setResult,
+        setResultDataBySessionId,
+        storageData,
+        addResult,
+        deleteResult,
+        toggleActive,
+        getConvasitionBySessionId,
+        setResultBySessionId,
+        getActiveResult
+      }}
+    >
       <div className={styles.layoutAi}>
         <LayoutSider />
         <Chatgpt />
@@ -212,7 +248,5 @@ function LayoutIndex () {
   )
 }
 
-export default LayoutIndex;
-export {
-  ChatContext,
-}
+export default LayoutIndex
+export { ChatContext }

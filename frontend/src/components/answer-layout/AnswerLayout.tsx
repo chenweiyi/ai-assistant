@@ -1,42 +1,50 @@
-import clsx from 'clsx';
-import { useEffect, useRef } from 'react';
-import WaveLoading from '@/components/loading/WaveLoading';
-import styles from './answerLayout.less';
+import WaveLoading from '@/components/loading/WaveLoading'
+import clsx from 'clsx'
+import { useEffect, useRef } from 'react'
+
+import styles from './answerLayout.less'
 
 type AnswerLayoutProps = {
-  data: Answer.answer[];
-  inputing: boolean;
-};
+  data: Answer.answer[]
+  inputing: boolean
+}
 
 export default function AnswerLayout(props: AnswerLayoutProps) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null)
   const stylesName = {
     question: styles.questionType,
     answer: styles.answerType,
-    loading: styles.loadingType,
-  };
+    loading: styles.loadingType
+  }
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.scrollTop = ref.current.scrollHeight;
+      ref.current.scrollTop = ref.current.scrollHeight
     }
-  });
+  })
 
   function generateContent(obj: Answer.answer, index: number) {
     if (obj.type === 'answer') {
       const paragraph = obj.content.split(/(\n|\r|\r\n)/)
       return paragraph.map((o, i) => (
-        <p className={clsx(
-          obj.error ? styles.answerError : '',
-          props.inputing && (i === paragraph.length - 1) && (index === props.data.length - 1) ? 'cursor-blingking' : '',
-        )}  
-          key={i}>{/^\s$/.test(o) ? '' : o.replace(/\s/g, ' ')}
+        <p
+          className={clsx(
+            obj.error ? styles.answerError : '',
+            props.inputing &&
+              i === paragraph.length - 1 &&
+              index === props.data.length - 1
+              ? 'cursor-blingking'
+              : ''
+          )}
+          key={i}
+        >
+          {/^\s$/.test(o) ? '' : o.replace(/\s/g, ' ')}
         </p>
-      ));
+      ))
     } else if (obj.type === 'question') {
-      return obj.content;
+      return obj.content
     } else if (obj.type === 'loading') {
-      return <WaveLoading style={{ top: '6px' }} />;
+      return <WaveLoading style={{ top: '6px' }} />
     }
   }
 
@@ -47,9 +55,9 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
           <div className={styles.triangle}></div>
           {generateContent(obj, index)}
         </>
-      );
+      )
     } else if (obj.type === 'loading') {
-      return generateContent(obj, index);
+      return generateContent(obj, index)
     }
   }
 
@@ -62,7 +70,7 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
               <div
                 className={clsx(
                   styles.answerItemContent,
-                  stylesName[item.type],
+                  stylesName[item.type]
                 )}
               >
                 <span className={styles.logo}>
@@ -73,9 +81,9 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
                 </div>
               </div>
             </li>
-          );
+          )
         })}
       </ul>
     </div>
-  );
+  )
 }

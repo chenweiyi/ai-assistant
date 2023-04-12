@@ -1,13 +1,13 @@
-import { request } from '@umijs/max';
-import { v4 as uuid } from 'uuid';
+import { request } from '@umijs/max'
+import { v4 as uuid } from 'uuid'
 
-type IMethod = 'POST' | 'GET';
+type IMethod = 'POST' | 'GET'
 
 async function http<ResponseData, RequestData>(
   url: string,
   method: IMethod,
   params?: RequestData,
-  config?: any,
+  config?: any
 ) {
   const data = await request<Common.Response<ResponseData>>(
     url,
@@ -16,32 +16,32 @@ async function http<ResponseData, RequestData>(
         method,
         getResponse: true,
         headers: {
-          'X-Trace-Id': uuid(),
-        },
+          'X-Trace-Id': uuid()
+        }
       },
       method === 'GET' ? { params } : { data: params },
-      config,
-    ),
-  );
+      config
+    )
+  )
 
   // console.log('http response data:', data);
-  return data?.data ?? {};
+  return data?.data ?? {}
 }
 
 function get<ResponseData, RequestData = undefined>(
   url: string,
   params?: RequestData,
-  config?: any,
+  config?: any
 ): Promise<Common.Response<ResponseData>> {
-  return http<ResponseData, RequestData>(url, 'GET', params, config);
+  return http<ResponseData, RequestData>(url, 'GET', params, config)
 }
 
 function post<ResponseData, RequestData = undefined>(
   url: string,
   data?: RequestData,
-  config?: any,
+  config?: any
 ): Promise<Common.Response<ResponseData>> {
-  return http<ResponseData, RequestData>(url, 'POST', data, config);
+  return http<ResponseData, RequestData>(url, 'POST', data, config)
 }
 
-export { get, post };
+export { get, post }

@@ -1,12 +1,12 @@
-import { defineConfig } from '@umijs/max';
+import { defineConfig } from '@umijs/max'
 
-const serviceUrl = "http://localhost:3000";
+const serviceUrl = 'http://localhost:3000'
 
 export default defineConfig({
   hash: true,
-  favicons: ["/assets/images/favicon.ico"],
+  favicons: ['/assets/images/favicon.ico'],
   cssLoaderModules: {
-    exportLocalsConvention: 'camelCase',
+    exportLocalsConvention: 'camelCase'
   },
   antd: {},
   access: {},
@@ -16,38 +16,37 @@ export default defineConfig({
   layout: false,
   mock: false,
   routes: [
-    { path: "/", redirect: "/ai/chatgpt" },
+    { path: '/', redirect: '/ai/chatgpt' },
     {
-      path: "/user",
-      component: "@/layouts/index",
+      path: '/user',
+      component: '@/layouts/index',
       routes: [
         {
-          path: "/user/login",
-          name: "userLogin",
-          component: "@/pages/login/Login",
-        },
-      ],
+          path: '/user/login',
+          name: 'userLogin',
+          component: '@/pages/login/Login'
+        }
+      ]
     },
     {
-      path: "/ai",
-      component: "@/layouts/index",
+      path: '/ai',
+      component: '@/layouts/index',
       routes: [
         {
-          path: "/ai/chatgpt",
-          name: "chatgpt",
-          component: "@/pages/ai/chatgpt/LayoutIndex",
-        },
-      ],
-    },
+          path: '/ai/chatgpt',
+          name: 'chatgpt',
+          component: '@/pages/ai/chatgpt/LayoutIndex'
+        }
+      ]
+    }
   ],
   proxy: {
     // 指标接口
-    "/q": {
+    '/q': {
       target: serviceUrl,
       changeOrigin: true,
-      disableHostCheck: true,
-    },
+      disableHostCheck: true
+    }
   },
-  npmClient: 'pnpm',
-});
-
+  npmClient: 'pnpm'
+})
