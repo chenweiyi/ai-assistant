@@ -1,15 +1,6 @@
-import Router from '@koa/router'
+import UserController from '../controller/user.mjs'
+import router from './index.mjs'
 
-const router = new Router()
-
-router.prefix('/users')
-
-router.get('/', function (ctx, next) {
-  ctx.body = 'this is a users response!'
-})
-
-router.get('/bar', function (ctx, next) {
-  ctx.body = 'this is a users/bar response'
-})
+router.get('/getUserInfo', UserController.getUserInfo)
 
 export default router

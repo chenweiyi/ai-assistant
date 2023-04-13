@@ -10,6 +10,7 @@ import serve from 'koa-static'
 import path from 'path'
 
 import message from './routes/message.mjs'
+import users from './routes/users.mjs'
 import conditional from './utils/koa-conditional-get.mjs'
 
 let app = new Koa()
@@ -67,6 +68,7 @@ app.use(
 // routes
 // app.use(index.routes(), index.allowedMethods())
 // app.use(users.routes(), users.allowedMethods())
+app.use(users.routes()).use(users.allowedMethods())
 app.use(message.routes()).use(message.allowedMethods())
 
 // error-handling

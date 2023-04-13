@@ -1,13 +1,18 @@
+import { SettingOutlined, UserOutlined } from '@ant-design/icons'
+import { Button } from 'antd'
 import clsx from 'clsx'
 import { findLast } from 'lodash-es'
-import { SyntheticEvent, useContext } from 'react'
+import { SyntheticEvent, useContext, useState } from 'react'
 
 import { ChatContext } from './LayoutIndex'
+import AccountModal from './components/AccountModal'
 import styles from './layoutSider.less'
 
 export default function LayoutSider() {
   const { result, addResult, deleteResult, toggleActive, getActiveResult } =
     useContext(ChatContext)
+  const [openAccount, setOpenAccount] = useState(false)
+  const [openSetting, setOpenSetting] = useState(false)
 
   function deleteItem(item: IConvasition) {
     return (e: SyntheticEvent) => {
@@ -54,30 +59,60 @@ export default function LayoutSider() {
   }
 
   return (
-    <div className={styles.layoutAiSlider}>
-      <div className={styles.topDiv}>
-        <button type='button' onClick={addResultHandler}>
-          + 添加新会话
-        </button>
+    <>
+      <div className={styles.layoutAiSlider}>
+        <div className={styles.topDiv}>
+          <button type='button' onClick={addResultHandler}>
+            + 添加新会话
+          </button>
+        </div>
+        <div className={styles.content}>
+          <ul className={styles.menusUl}>
+            {result.map((item) => {
+              return (
+                <li
+                  className={clsx(styles.menusLi, {
+                    [styles.active]: item.active
+                  })}
+                  key={item.sessionId}
+                  onClick={toggle(item.sessionId)}
+                >
+                  <div className={styles.liTitle}>{getTitle(item)}</div>
+                  <div className={styles.liBtns}>
+                    <button type='button' onClick={deleteItem(item)}>
+                      删除
+                    </button>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+        <div className={styles.bottomDiv}>
+          <Button
+            type='default'
+            shape='default'
+            icon={<SettingOutlined />}
+            size='middle'
+            style={{
+              marginBottom: '8px'
+            }}
+            onClick={() => setOpenSetting(true)}
+          >
+            设置
+          </Button>
+          <Button
+            type='default'
+            shape='default'
+            icon={<UserOutlined />}
+            size='middle'
+            onClick={() => setOpenAccount(true)}
+          >
+            账户
+          </Button>
+        </div>
       </div>
-      <ul className={styles.menusUl}>
-        {result.map((item) => {
-          return (
-            <li
-              className={clsx(styles.menusLi, { [styles.active]: item.active })}
-              key={item.sessionId}
-              onClick={toggle(item.sessionId)}
-            >
-              <div className={styles.liTitle}>{getTitle(item)}</div>
-              <div className={styles.liBtns}>
-                <button type='button' onClick={deleteItem(item)}>
-                  删除
-                </button>
-              </div>
-            </li>
-          )
-        })}
-      </ul>
-    </div>
+      <AccountModal open={openAccount} setOpen={setOpenAccount}></AccountModal>
+    </>
   )
 }

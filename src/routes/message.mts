@@ -1,10 +1,5 @@
-import RouterEngine from '@koa/router'
-
 import MessageController from '../controller/message.mjs'
-
-const router = new RouterEngine()
-
-router.prefix('/q')
+import router from './index.mjs'
 
 router.all('/sendMsg/sse', MessageController.sendMsgSSE)
 
