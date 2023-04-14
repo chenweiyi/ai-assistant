@@ -6,6 +6,7 @@ import { SyntheticEvent, useContext, useState } from 'react'
 
 import { ChatContext } from './LayoutIndex'
 import AccountModal from './components/AccountModal'
+import SettingModal from './components/SettingModal'
 import styles from './layoutSider.less'
 
 export default function LayoutSider() {
@@ -113,6 +114,7 @@ export default function LayoutSider() {
         </div>
       </div>
       <AccountModal open={openAccount} setOpen={setOpenAccount}></AccountModal>
+      <SettingModal open={openSetting} setOpen={setOpenSetting}></SettingModal>
     </>
   )
 }
