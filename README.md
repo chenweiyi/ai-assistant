@@ -1,42 +1,54 @@
-# 一个 AI 助手
-这是一个AI项目，集成各种开放AI的能力。
-## 项目介绍
+# An AI Assistant
 
-![截图](Screenshots/jietu.png)
+[中文文档](README_zh.md)
 
+This is an AI project that integrates various open source AI capabilities.
 
-1. 目前仅仅接入了 chatgpt api，后面打算接入其他 ai，比如国产 ai。
-2. 前端使用 umijs, react, ts; 后端使用 koa，ts，后端也是用 ES module 方式去写
+## Project Introduction
 
-## node 版本
+![Screenshot](Screenshots/jietu.png)
 
-需要 node >= 18 版本
+1. Currently, only the chatgpt API is integrated, and other AIs such as domestic AIs are planned to be integrated later.
+2. The front-end uses umijs, react, ts; the back-end uses koa, ts, and also uses ES module to write.
 
-## 必要文件
+## Node Version
 
-在`src/consts/`下面新建 key.mjs, 提供`OPENAI_API_KEY`字段用于调用 openai api，例如如下方式：
+Node version >= 18 is required.
+
+## Necessary Files
+
+Create a `key.mjs` file under `src/consts/`, providing the following fields for calling OpenAI API in the following way:
+
 ```
+// openAi key
 export const OPENAI_API_KEY = 'xxxx';
+// Parameters needed to be passed in headers when calling https://api.openai.com/dashboard/billing/credit_grants interface authorization
+export const ACCOUNT_AUTHORIZATION = 'xxx';
+// Parameters needed to be passed in headers when calling https://api.openai.com/dashboard/billing/credit_grants interface openaiOrganization
+export const ACCOUNT_ORGANIZATION = 'xxx';
+
 ```
-> 如果你暂时没有`openAI key`, 可以邮箱联系我(737649321@qq.com)，我给你提供我自己的key.
 
-## 如何使用？
+> If you don't have these fields temporarily, you can send me an email (737649321@qq.com), I am happy to help you.
 
-1. 首先安装依赖，`根目录`下安装依赖，使用`pnpm`安装代码。
-3. 启动项目：根目录下执行`npm run develop`，启动后端项目。
-4. 访问项目地址：`http://localhost:3000`
+## How To Use?
 
-## 如何开发？
+1. First install dependencies. Install dependencies under `root directory` using `pnpm`.
+2. Start the project: Execute `npm run dev` under root directory to start the backend project.
+3. Access project address: `http://localhost:3000`
 
-1. 首先安装依赖，`根目录`下和`/frontend/`目录下都要安装依赖，使用`pnpm`安装代码。
-2. 构建前端产物：`frontend/`目录下，执行`npm run dev`, 启动前端项目。
-3. 启动后端：根目录下执行`npm run develop`，启动后端项目。
-4. 访问前端项目地址：`http://localhost:8000`
+## How To Develop?
+
+1. First install dependencies. Install dependencies both under root directory and `/frontend/` directory using `pnpm`.
+2. Build frontend artifacts: Under `/frontend/` directory execute `npm run dev`, start frontend project.
+3. Start backend: Execute `npm run dev` under root directory to start backend project; if you need to debug the backend, please execute `npm run debug`.
+4. Access frontend project address: `http://localhost:8000`
 
 ## TODO
-- [x] stream输出
-- [ ] monorepo探索
-- [ ] chrome扩展
 
-
-
+- [x] Stream output
+- [x] Get account information
+- [x] Support switching to GPT-4
+- [ ] Monorepo exploration
+- [ ] Chrome extension
+- [ ] i18n

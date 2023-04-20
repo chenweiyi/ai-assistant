@@ -34,7 +34,7 @@
     "@types/node": "^18.14.0",
     "@types/qs": "^6.9.7",
     "abortcontroller-polyfill": "^1.7.5",
-    "chatgpt": "^5.0.6",
+    "chatgpt": "^5.2.2",
     "dayjs": "^1.11.7",
     "debug": "^4.1.1",
     "https-proxy-agent": "^5.0.1",

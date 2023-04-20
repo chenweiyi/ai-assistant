@@ -1,5 +1,6 @@
 import AnswerLayout from '@/components/answer-layout/AnswerLayout'
 import { ChatContext } from '@/pages/ai/chatgpt/LayoutIndex'
+import { getSettingData } from '@/utils/store'
 import { useLatest } from 'ahooks'
 import qs from 'qs'
 import {
@@ -44,8 +45,13 @@ export default function IndexPage() {
    * @param sessionId
    */
   async function getConstantMsg(meta: RequestOption, sessionId: string) {
+    const settings = getSettingData()
     const source = new EventSource(
       `/q/sendMsg/sse?${qs.stringify({
+        apiKey: settings?.apiKey,
+        temperature: settings?.temperature,
+        top_p: settings?.top_p,
+        model: settings?.model,
         ownerId,
         parentMessageId:
           getConvasitionBySessionId(sessionId)?.parentMessageId || '',

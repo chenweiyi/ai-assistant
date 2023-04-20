@@ -1,19 +1,15 @@
 import TitleComponent from '@/components/title/TitleComponent'
+import { ILocalSettings, getSettingData, setSettingData } from '@/utils/store'
 import { InfoCircleOutlined } from '@ant-design/icons'
-import { Form, FormInstance, Input, Modal, Slider } from 'antd'
-import { useEffect, useRef, useState } from 'react'
+import { Form, FormInstance, Input, Modal, Select, Slider } from 'antd'
+import { forEach } from 'lodash-es'
+import { useEffect, useRef } from 'react'
 
 import styles from './settingModal.less'
 
 interface SettingModalProps {
   open: boolean
   setOpen: (open: boolean) => void
-}
-
-interface FormType {
-  apiKey: string
-  temperature?: number
-  top_p?: number
 }
 
 export default function SettingModal(props: SettingModalProps) {
@@ -26,10 +22,13 @@ export default function SettingModal(props: SettingModalProps) {
     props.setOpen(false)
   }
 
-  const [info, setInfo] = useState<UserInfo | undefined>(undefined)
-  const [loading, setLoading] = useState(false)
-  const formRef = useRef<FormInstance<FormType>>(null)
-  const [form] = Form.useForm()
+  const formRef = useRef<FormInstance<ILocalSettings>>(null)
+  const initData = {
+    apiKey: '',
+    model: 'gpt-3.5-turbo',
+    temperature: 0.8,
+    top_p: 1
+  }
 
   const apiKeyRule = [
     {
@@ -50,11 +49,20 @@ export default function SettingModal(props: SettingModalProps) {
     }
   ]
 
-  useEffect(() => {}, [props.open])
+  useEffect(() => {
+    if (props.open) {
+      const data = getSettingData()
+      if (data) {
+        forEach(data, (value, key) => {
+          formRef.current?.setFieldValue(key, value)
+        })
+      }
+    }
+  }, [props.open])
 
-  const submit = (values: FormType) => {
+  const submit = (values: ILocalSettings) => {
     console.log('submit', values)
-    localStorage.setItem('settings', JSON.stringify(values))
+    setSettingData(values as ILocalSettings)
   }
 
   const submitError = (errorInfo: any) => {
@@ -70,6 +78,7 @@ export default function SettingModal(props: SettingModalProps) {
       okText='确定'
       cancelText='取消'
       width={600}
+      destroyOnClose={false}
     >
       <div className={styles.container}>
         <Form
@@ -79,16 +88,18 @@ export default function SettingModal(props: SettingModalProps) {
           ref={formRef}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 16, offset: 2 }}
-          initialValues={{
-            apiKey: '',
-            temperature: 1,
-            top_p: 1
-          }}
+          initialValues={initData}
           onFinish={submit}
           onFinishFailed={submitError}
         >
           <Form.Item label='apiKey' name='apiKey' rules={apiKeyRule}>
             <Input placeholder='不填值时使用系统默认key' />
+          </Form.Item>
+          <Form.Item label='model' name='model'>
+            <Select>
+              <Select.Option value='gpt-3.5-turbo'>gpt-3.5-turbo</Select.Option>
+              <Select.Option value='gpt-4'>gpt-4</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item
             label='temperature'

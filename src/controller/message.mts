@@ -9,6 +9,7 @@ import debugLibrary from 'debug'
 import { EventEmitter } from 'events'
 import proxy from 'https-proxy-agent'
 import Koa from 'koa'
+import { isNil } from 'lodash-es'
 import fetch from 'node-fetch'
 import { PassThrough } from 'stream'
 
@@ -28,10 +29,16 @@ export default class MessageController {
    * @param ctx
    */
   public static async sendMsgSSE(ctx: Koa.Context) {
-    const { msg, ownerId, parentMessageId } = ctx.request.query as any
+    const { msg, ownerId, parentMessageId, model, apiKey, temperature, top_p } =
+      ctx.request.query as any
     if (!chatgptApiMap.get(ownerId)) {
       const api = new ChatGPTAPI({
-        apiKey: OPENAI_API_KEY,
+        apiKey: apiKey || OPENAI_API_KEY,
+        completionParams: {
+          model: model || 'gpt-3.5-turbo',
+          temperature: isNil(temperature) ? 0.8 : +temperature,
+          top_p: isNil(top_p) ? 1 : +top_p
+        },
         // @ts-ignore
         fetch: ENABLE_PROXY
           ? (url, options = {}) => {
@@ -82,7 +89,7 @@ export default class MessageController {
               done: false,
               error: false
             })
-            debug('onProgress data:', data)
+            // debug('onProgress data:', data)
             events.emit('data', data)
           },
           timeoutMs: CHATGPT_REQUEST_TIMEOUT,

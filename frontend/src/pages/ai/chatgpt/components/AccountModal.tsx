@@ -22,13 +22,20 @@ export default function AccountModal(props: AccountModalProps) {
 
   const [info, setInfo] = useState<UserInfo | undefined>(undefined)
   const [loading, setLoading] = useState(false)
+  const [errorMsg, setErrorMsg] = useState('')
 
   useEffect(() => {
     if (props.open) {
       setLoading(true)
       User.getUserInfo()
         .then((res) => {
-          setInfo(res.data)
+          if (res.code === 200) {
+            setInfo(res.data)
+            setErrorMsg('')
+          } else {
+            setInfo(undefined)
+            setErrorMsg(res.msg)
+          }
           setLoading(false)
         })
         .catch(() => {
@@ -51,6 +58,11 @@ export default function AccountModal(props: AccountModalProps) {
         {loading ? (
           <div className={styles.loading}>
             <SyncOutlined spin />
+          </div>
+        ) : errorMsg ? (
+          <div className={styles.errorMsg}>
+            <div className={styles.title}>Error:</div>
+            <div className={styles.content}>{errorMsg}</div>
           </div>
         ) : info ? (
           <div className={styles.info}>
