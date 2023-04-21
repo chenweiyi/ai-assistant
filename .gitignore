@@ -1,14 +1,16 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-frontend/node_modules
-frontend/.env.local
-frontend/.umirc.local.ts
-frontend/config/config.local.ts
-frontend/.umi
-frontend/.umi-production
-frontend/.umi-test
-frontend/.mfsu
-frontend/.swc
+packages/frontend/node_modules
+packages/frontend/.env.local
+packages/frontend/.umirc.local.ts
+packages/frontend/config/config.local.ts
+packages/frontend/.umi
+packages/frontend/.umi-production
+packages/frontend/.umi-test
+packages/frontend/.mfsu
+packages/frontend/.swc
+
+packages/backend/src/consts/key.mjs
 
 .umi
 .umi-production
@@ -16,5 +18,5 @@ frontend/.swc
 
 node_modules
 build
-src/consts/key.mjs
+dist
 yarn-error.log

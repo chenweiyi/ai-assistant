@@ -1,0 +1,41 @@
+.container {
+  min-height: 200px;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.info {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: flex-start;
+
+  .item {
+    margin: 8px 0;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+
+    .title {
+      width: 100px;
+    }
+  }
+}
+
+.error-msg {
+  color: #f5222d;
+
+  .title {
+    font-size: 24px;
+  }
+
+  .content {
+    font-style: italic;
+    padding-left: 24px;
+  }
+}

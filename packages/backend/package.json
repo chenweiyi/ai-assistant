@@ -1,20 +1,18 @@
 {
-  "name": "chartgpt",
+  "name": "chartgpt-backend",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "lerna run dev",
-    "build": "lerna run build",
-    "test": "lerna run test",
-    "debug": "npm run debug:be & npm run dev:fe",
-    "dev:fe": "lerna run dev --scope=chartgpt-frontend", 
-    "dev:be": "lerna run dev --scope=chartgpt-backend",
-    "debug:be": "lerna run debug --scope=chartgpt-backend",
-    "prepare": "husky install",
-    "pre-commit": "lint-staged",
-    "prettier:check": "prettier '**/*.{ts,tsx,mts,mjs,less,js}' --check",
-    "prettier:write": "prettier '**/*.{ts,tsx,mts,mjs,less,js}' --write"
+    "dev": "nodemon ./src/bin/www.mts",
+    "debug": "cross-env DEBUG=* nodemon ./src/bin/www.mts",
+    "prd": "pm2 start build/bin/www.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf ./build",
+    "build-ts": "tsc",
+    "build": "npm run clean && npm run build-ts && npm run copy-static",
+    "copy-static": "node src/copyStatic.mjs",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@koa/router": "^12.0.0",
@@ -79,8 +77,5 @@
     "gpt4",
     "ai",
     "ai-assistant"
-  ],
-  "workspaces": [
-    "packages/*"
   ]
 }

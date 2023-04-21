@@ -1,0 +1,29 @@
+.loading {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  font-size: 0;
+  color: #000;
+  width: 54px;
+  height: 18px;
+
+  :global {
+    div {
+      width: 10px;
+      height: 10px;
+      margin: 4px;
+      border-radius: 100%;
+      position: relative;
+      box-sizing: border-box;
+      display: inline-block;
+      float: none;
+      background-color: currentcolor;
+      border: 0 solid currentcolor;
+      animation: ball-beat 0.7s -0.15s infinite linear;
+
+      &:nth-child(2n-1) {
+        animation-delay: -0.5s;
+      }
+    }
+  }
+}
