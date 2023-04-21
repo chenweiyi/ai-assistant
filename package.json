@@ -8,7 +8,7 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "debug": "npm run debug:be & npm run dev:fe",
-    "dev:fe": "lerna run dev --scope=chartgpt-frontend", 
+    "dev:fe": "lerna run dev --scope=chartgpt-frontend",
     "dev:be": "lerna run dev --scope=chartgpt-backend",
     "debug:be": "lerna run debug --scope=chartgpt-backend",
     "prepare": "husky install",
@@ -79,8 +79,5 @@
     "gpt4",
     "ai",
     "ai-assistant"
-  ],
-  "workspaces": [
-    "packages/*"
   ]
 }
