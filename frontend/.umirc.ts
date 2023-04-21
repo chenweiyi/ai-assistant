@@ -1,6 +1,8 @@
 import { defineConfig } from '@umijs/max'
 
-const serviceUrl = 'http://localhost:3000'
+const serviceUrl = process.env.CUSTOM_PROXY_URL
+
+console.log('serviceUrl', serviceUrl)
 
 export default defineConfig({
   hash: true,

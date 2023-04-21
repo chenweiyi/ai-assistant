@@ -22,27 +22,39 @@ Create a `key.mjs` file under `src/consts/`, providing the following fields for 
 ```
 // openAi key
 export const OPENAI_API_KEY = 'xxxx';
-// Parameters needed to be passed in headers when calling https://api.openai.com/dashboard/billing/credit_grants interface authorization
+// Parameters passed in headers when calling https://api.openai.com/dashboard/billing/credit_grants interface authorization
 export const ACCOUNT_AUTHORIZATION = 'xxx';
-// Parameters needed to be passed in headers when calling https://api.openai.com/dashboard/billing/credit_grants interface openaiOrganization
+// Parameters passed in headers when calling https://api.openai.com/dashboard/billing/credit_grants interface openaiOrganization
 export const ACCOUNT_ORGANIZATION = 'xxx';
 
 ```
 
 > If you don't have these fields temporarily, you can send me an email (737649321@qq.com), I am happy to help you.
 
-## How To Use?
+## How to Use?
 
 1. First install dependencies. Install dependencies under `root directory` using `pnpm`.
-2. Start the project: Execute `npm run dev` under root directory to start the backend project.
+2. Start the project: execute `npm run dev:backend` under root directory to start the backend project.
 3. Access project address: `http://localhost:3000`
 
-## How To Develop?
+## How to Develop?
 
-1. First install dependencies. Install dependencies both under root directory and `/frontend/` directory using `pnpm`.
-2. Build frontend artifacts: Under `/frontend/` directory execute `npm run dev`, start frontend project.
-3. Start backend: Execute `npm run dev` under root directory to start backend project; if you need to debug the backend, please execute `npm run debug`.
-4. Access frontend project address: `http://localhost:8000`
+### Method One: One-Click Startup
+
+Execute `npm run start:dev` or `npm run start:debug`.
+
+### Method Two: Separate Frontend and Backend Startup
+
+1. First install dependencies. Install dependencies both under `/frontend/` directory and root directory using pnpm.
+2. Build frontend artifacts：execute "npm run dev" under `/frontend/` directory to start the frontend project.
+3. Start backend: execute `npm run dev:backend` under root directory to start the backend project; if you need to debug the backend, please execute `npm run debug:backend`.
+4. Access frontend project address：`http://localhost:8000`
+
+### How to Modify Ports
+
+1. The default front-end port is `8000`, and the back-end port is `3000`.
+2. To modify the front-end port, modify the port configuration in `/frontend/.env`.
+3. To modify the back-end port, modify the `SERVER_PORT` field in `/src/server.mjs`. If you need to collaborate with front-end and back-end debugging, you also need to modify proxy configuration of `/frontend/.env`.
 
 ## TODO
 

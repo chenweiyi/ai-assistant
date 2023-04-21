@@ -1,5 +1,5 @@
 // 后端服务器端口
-export const SERVER_PORT = '3000'
+export const SERVER_PORT = 5000
 // 是否启用代理服务器
 export const ENABLE_PROXY = true
 // 代理服务器地址

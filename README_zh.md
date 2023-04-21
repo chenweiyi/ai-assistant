@@ -32,15 +32,27 @@ export const ACCOUNT_ORGANIZATION = 'xxx';
 ## 如何使用？
 
 1. 首先安装依赖，`根目录`下安装依赖，使用`pnpm`安装代码。
-2. 启动项目：根目录下执行`npm run dev`，启动后端项目。
+2. 启动项目：根目录下执行`npm run dev:backend`，启动后端项目。
 3. 访问项目地址：`http://localhost:3000`
 
 ## 如何开发？
 
+### 方式一：一键启动
+
+`npm run start:dev` Or `npm run start:debug`
+
+### 方式二：分前后端启动
+
 1. 首先安装依赖，`根目录`下和`/frontend/`目录下都要安装依赖，使用`pnpm`安装代码。
 2. 构建前端产物：`frontend/`目录下，执行`npm run dev`, 启动前端项目。
-3. 启动后端：根目录下执行`npm run dev`，启动后端项目; 如果需要调试后端，请执行`npm run debug`。
+3. 启动后端：根目录下执行`npm run dev:backend`，启动后端项目; 如果需要调试后端，请执行`npm run debug:backend`。
 4. 访问前端项目地址：`http://localhost:8000`
+
+### 如何修改端口
+
+1. 默认前端端口是`8000`, 后端端口是`3000`
+2. 修改前端端口，修改`/frontend/.env`下的端口配置
+3. 修改后端端口，修改`/src/server.mjs`下的`SERVER_PORT`字段，如果前端需要和后端联调，还需修改`/frontend/.env`的代理配置
 
 ## TODO
 
