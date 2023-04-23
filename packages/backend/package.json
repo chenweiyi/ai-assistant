@@ -60,16 +60,5 @@
     "shelljs": "^0.8.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.0"
-  },
-  "keywords": [
-    "openai",
-    "chatgpt",
-    "chat",
-    "gpt",
-    "gpt-3",
-    "gpt3",
-    "gpt4",
-    "ai",
-    "ai-assistant"
-  ]
+  }
 }

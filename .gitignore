@@ -18,3 +18,5 @@ packages/backend/build
 
 # 公共
 node_modules
+.umi
+.umi-production

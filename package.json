@@ -42,6 +42,9 @@
     "gpt3",
     "gpt4",
     "ai",
-    "ai-assistant"
+    "ai-assistant",
+    "monorepo",
+    "pnpm",
+    "lerna"
   ]
 }
