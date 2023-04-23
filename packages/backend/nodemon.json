@@ -1,0 +1,12 @@
+{
+  "delay": 1000,
+  "verbose": true,
+  "colours": true,
+  "watch": ["./src", "./package.json", "./tsconfig.json"],
+  "ignore": ["./src/@types", "node_modules"],
+  "execMap": {
+    "ts": "ts-node",
+    "mts": "ts-node --esm -T"
+  },
+  "ext": "mts"
+}
