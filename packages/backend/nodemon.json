@@ -1,7 +1,7 @@
 {
   "delay": 1000,
-  "verbose": true,
-  "colours": false,
+  "verbose": false,
+  "colours": true,
   "watch": ["./src", "./package.json", "./tsconfig.json"],
   "ignore": ["./src/@types"],
   "execMap": {
