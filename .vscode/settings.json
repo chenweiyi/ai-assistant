@@ -8,5 +8,6 @@
   "scss.validate": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.stylelint": true
-  }
+  },
+  "unocss.root": "packages/frontend"
 }

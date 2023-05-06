@@ -20,10 +20,14 @@
     "@ant-design/pro-components": "^2.0.1",
     "@types/uuid": "^9.0.1",
     "@umijs/max": "^4.0.64",
+    "@umijs/plugins": "^4.0.67",
+    "@unocss/cli": "^0.51.12",
+    "@unocss/reset": "^0.51.12",
     "ahooks": "^3.7.6",
     "antd": "^5.0.0",
     "clsx": "^1.2.1",
     "qs": "^6.11.1",
+    "unocss": "^0.51.12",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

@@ -67,7 +67,7 @@ export default function LayoutSider() {
             + 添加新会话
           </button>
         </div>
-        <div className={styles.content}>
+        <div className={clsx(styles.content, 'pt-10px', 'pb-10px')}>
           <ul className={styles.menusUl}>
             {result.map((item) => {
               return (
