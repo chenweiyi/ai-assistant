@@ -81,7 +81,7 @@ export default function AccountModal(props: AccountModalProps) {
             <div className={styles.item}>
               <span className={styles.title}>套餐信息:</span>
               <div className={styles.packages}>
-                {info.grants.data.map((p: grantData) => (
+                {info.grants?.data.map((p: grantData) => (
                   <div key={p.id} className={styles.package}>
                     <span>有效期：</span>
                     <span>

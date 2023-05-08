@@ -3,9 +3,9 @@
   flex: 0 0 250px;
   height: 100%;
   padding: 8px;
-  background-color: fadeout(hsl(220deg 4.92% 11.96%), 90%);
+  background-color: fadeout(hsl(220deg 4.92% 11.96%), 100%);
   font-size: 14px;
-  color: #fff;
+  color: #222;
   font-weight: bold;
   max-width: 250px;
   overflow: hidden;
@@ -31,7 +31,8 @@
       background-color: transparent;
       border-width: 0;
       cursor: pointer;
-      color: #fff;
+      color: #000;
+      font-weight: 500;
     }
   }
 }
@@ -77,13 +78,14 @@
   flex-flow: row nowrap;
   justify-content: flex-start;
   align-items: center;
+  border-radius: 4px;
 
   &:hover {
-    background-color: #2d2e30;
+    background-color: fadeout(hsl(78deg 16.67% 76.47%), 50%);
   }
 
   &.active {
-    background-color: #2d2e30;
+    background-color: fadeout(hsl(78deg 16.67% 76.47%), 50%);
   }
 }
 
@@ -106,7 +108,6 @@
       background-color: transparent;
       border-width: 0;
       cursor: pointer;
-      color: #fff;
     }
   }
 }
@@ -118,5 +119,5 @@
   justify-content: space-around;
   align-items: stretch;
   padding: 8px;
-  border-top: 1px solid #bbb;
+  // border-top: 1px solid #bbb;
 }

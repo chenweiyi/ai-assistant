@@ -12,7 +12,10 @@ export const User = {
   getUserInfo: async (
     data?: requestData
   ): Promise<Common.Response<UserInfo>> => {
-    const res = await get<UserInfo, requestData>('/q/getUserInfo', data)
+    const res = await get<UserInfo, requestData>(
+      `/q/getUserInfo?t=${new Date().getTime()}`,
+      data
+    )
     console.log('getUserInfo - /q/getUserInfo:', res)
     return res
   }
