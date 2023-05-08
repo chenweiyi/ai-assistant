@@ -1,9 +1,9 @@
 .layout-ai-slider {
   position: relative;
   flex: 0 0 250px;
-  height: 100vh;
+  height: 100%;
   padding: 8px;
-  background-color: #1d1e20;
+  background-color: fadeout(hsl(220deg 4.92% 11.96%), 90%);
   font-size: 14px;
   color: #fff;
   font-weight: bold;
@@ -13,6 +13,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  border-radius: 6px;
 }
 
 .topDiv {
@@ -37,6 +38,7 @@
 
 .content {
   flex: 1;
+  padding: 10px 0;
   overflow-x: hidden;
   overflow-y: overlay;
 

@@ -1,0 +1,17 @@
+{
+  // 使用 IntelliSense 了解相关属性。
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "调试max lint",
+      "program": "//Users/zyb/my/ai-assistant/node_modules/.pnpm/registry.npmmirror.com+@umijs+max@4.0.64_@babel+core@7.21.4_@types+lodash.merge@4.6.7_@types+_wkagvk5gqshzow3kjjvwols4oq/node_modules/@umijs/max/dist/cli.js",
+      "request": "launch",
+      "args": ["lint"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    }
+  ]
+}

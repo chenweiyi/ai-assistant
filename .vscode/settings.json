@@ -9,5 +9,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.stylelint": true
   },
-  "unocss.root": "packages/frontend"
+  "unocss.root": "packages/frontend",
+  "stylelint.packageManager": "pnpm"
 }

@@ -1,6 +1,7 @@
 import { SESSION_STORAGE_CONVASITION_CHATGPT_KEY } from '@/constants/constant'
 import { getRandomId } from '@/utils/tools'
 import { useLatest } from 'ahooks'
+import clsx from 'clsx'
 import {
   Dispatch,
   SetStateAction,
@@ -240,9 +241,23 @@ function LayoutIndex() {
         getActiveResult
       }}
     >
-      <div className={styles.layoutAi}>
-        <LayoutSider />
-        <Chatgpt />
+      <div
+        className={clsx(
+          'flex',
+          'flex-row',
+          'items-center',
+          'w-100%',
+          'h-100%',
+          'p-200px',
+          'pt-100px',
+          'pb-100px',
+          styles.layout
+        )}
+      >
+        <div className={styles.layoutAi}>
+          <LayoutSider />
+          <Chatgpt />
+        </div>
       </div>
     </ChatContext.Provider>
   )
