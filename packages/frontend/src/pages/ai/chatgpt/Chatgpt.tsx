@@ -1,7 +1,9 @@
 import AnswerLayout from '@/components/answer-layout/AnswerLayout'
 import { ChatContext } from '@/pages/ai/chatgpt/LayoutIndex'
 import { getSettingData } from '@/utils/store'
+import { PlusCircleOutlined } from '@ant-design/icons'
 import { useLatest } from 'ahooks'
+import { Input, InputRef } from 'antd'
 import qs from 'qs'
 import {
   BaseSyntheticEvent,
@@ -13,6 +15,7 @@ import {
 } from 'react'
 
 import styles from './chatgpt.less'
+import PromptModal from './components/PromptModal'
 
 type RequestOption = {
   msg: string
@@ -33,9 +36,11 @@ export default function IndexPage() {
 
   const result = active?.data || []
   const isInput = active?.isInput || false
+  const isLoading = active?.isLoading || false
   const [inputValue, setInputValue] = useState('')
   const [disabled, setDisabled] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<InputRef>(null)
+  const [open, setOpen] = useState(false)
 
   const latestResultRef = useLatest(result)
 
@@ -187,12 +192,8 @@ export default function IndexPage() {
     }
   }
 
-  // 回车发送消息事件
-  function inputKeyUpHandler(e: KeyboardEvent<HTMLInputElement>) {
-    if (e.code === 'Enter') {
-      // sendMsg(active?.sessionId as string)();
-      sendMsg(active?.sessionId as string)()
-    }
+  function pressEnterHandler() {
+    sendMsg(active?.sessionId as string)()
   }
 
   // 聚焦输入框
@@ -220,9 +221,34 @@ export default function IndexPage() {
     }
   }
 
+  function choosePromptHandler(prompt: string) {
+    focusInput()
+    setInputValue(prompt)
+    setOpen(false)
+  }
+
+  function handleKeyDown(e: any) {
+    console.log('inputKeyUpHandler:', e)
+    if (e.ctrlKey && e.key === 'o') {
+      setOpen(true)
+    }
+  }
+
+  function addEvent() {
+    document.addEventListener('keydown', handleKeyDown)
+  }
+
+  function removeEvent() {
+    document.removeEventListener('keydown', handleKeyDown)
+  }
+
   useEffect(() => {
     focusInput()
     initialData()
+    addEvent()
+    return () => {
+      removeEvent()
+    }
   }, [])
 
   useEffect(() => {
@@ -237,23 +263,32 @@ export default function IndexPage() {
     })
   }, [JSON.stringify(latestResultRef.current)])
 
+  useEffect(() => {
+    if (active?.isInput || active?.isLoading) {
+      setDisabled(true)
+    } else {
+      focusInput()
+    }
+  }, [active?.isInput, active?.isLoading])
+
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <AnswerLayout data={result} inputing={isInput} />
+        <AnswerLayout data={result} inputing={isInput} isLoading={isLoading} />
       </div>
       <div className={styles.questionWrapper}>
-        <label className={styles.labelForInput}>
-          <input
-            ref={inputRef}
-            className={styles.input}
-            value={inputValue}
-            onChange={changeInput}
-            onKeyUp={inputKeyUpHandler}
-            disabled={disabled}
-            placeholder='请输入您的问题'
-          />
-        </label>
+        <Input
+          ref={inputRef}
+          className={styles.input}
+          size='large'
+          allowClear
+          placeholder='请输入您的问题'
+          value={inputValue}
+          onChange={changeInput}
+          onPressEnter={pressEnterHandler}
+          disabled={disabled}
+          prefix={<PlusCircleOutlined onClick={() => setOpen(true)} />}
+        />
         <button
           disabled={disabled || !inputValue}
           type='button'
@@ -266,6 +301,11 @@ export default function IndexPage() {
           发送
         </button>
       </div>
+      <PromptModal
+        open={open}
+        setOpen={setOpen}
+        choosePrompt={choosePromptHandler}
+      />
     </div>
   )
 }

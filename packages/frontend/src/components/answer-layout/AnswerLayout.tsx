@@ -7,6 +7,7 @@ import styles from './answerLayout.less'
 type AnswerLayoutProps = {
   data: Answer.answer[]
   inputing: boolean
+  isLoading: boolean
 }
 
 export default function AnswerLayout(props: AnswerLayoutProps) {
@@ -73,7 +74,11 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
                   stylesName[item.type]
                 )}
               >
-                <span className={styles.logo}>
+                <span
+                  className={clsx(styles.logo, {
+                    rotate: props.data.length - 1 === index && props.inputing
+                  })}
+                >
                   {item.type === 'question' && <span>我</span>}
                 </span>
                 <div className={styles.content}>

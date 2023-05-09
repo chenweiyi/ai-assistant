@@ -174,6 +174,9 @@ importers:
       ahooks:
         specifier: ^3.7.6
         version: registry.npmmirror.com/ahooks@3.7.6(react@16.14.0)
+      animate.css:
+        specifier: ^4.1.1
+        version: registry.npmmirror.com/animate.css@4.1.1
       antd:
         specifier: ^5.0.0
         version: registry.npmmirror.com/antd@5.0.0(react-dom@17.0.2)(react@16.14.0)
@@ -5488,7 +5491,7 @@ packages:
       axios: registry.npmmirror.com/axios@0.27.2
       babel-plugin-import: registry.npmmirror.com/babel-plugin-import@1.13.6
       dayjs: registry.npmmirror.com/dayjs@1.11.7
-      dva-core: registry.npmmirror.com/dva-core@2.0.4(redux@3.7.2)
+      dva-core: registry.npmmirror.com/dva-core@2.0.4(redux@4.2.1)
       dva-immer: registry.npmmirror.com/dva-immer@1.0.1(dva@2.5.0-beta.2)
       dva-loading: registry.npmmirror.com/dva-loading@3.0.24(dva-core@2.0.4)
       event-emitter: registry.npmmirror.com/event-emitter@0.3.5
@@ -5540,7 +5543,7 @@ packages:
       axios: registry.npmmirror.com/axios@0.27.2
       babel-plugin-import: registry.npmmirror.com/babel-plugin-import@1.13.6
       dayjs: registry.npmmirror.com/dayjs@1.11.7
-      dva-core: registry.npmmirror.com/dva-core@2.0.4(redux@4.2.1)
+      dva-core: registry.npmmirror.com/dva-core@2.0.4(redux@3.7.2)
       dva-immer: registry.npmmirror.com/dva-immer@1.0.1(dva@2.5.0-beta.2)
       dva-loading: registry.npmmirror.com/dva-loading@3.0.24(dva-core@2.0.4)
       event-emitter: registry.npmmirror.com/event-emitter@0.3.5
@@ -6369,6 +6372,12 @@ packages:
       kind-of: registry.npmmirror.com/kind-of@3.2.2
       longest: registry.npmmirror.com/longest@1.0.1
       repeat-string: registry.npmmirror.com/repeat-string@1.6.1
+    dev: false
+
+  registry.npmmirror.com/animate.css@4.1.1:
+    resolution: {integrity: sha512-+mRmCTv6SbCmtYJCN4faJMNFVNN5EuCTTprDTAo7YzIGji2KADmakjVA3+8mVDkZ2Bf09vayB35lSQIex2+QaQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/animate.css/-/animate.css-4.1.1.tgz}
+    name: animate.css
+    version: 4.1.1
     dev: false
 
   registry.npmmirror.com/ansi-align@2.0.0:
