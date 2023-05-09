@@ -1,6 +1,9 @@
 import WaveLoading from '@/components/loading/WaveLoading'
+import { ILocalSettings, getSettingData } from '@/utils/store'
 import clsx from 'clsx'
 import { useEffect, useRef } from 'react'
+import MarkDown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 import styles from './answerLayout.less'
 
@@ -26,22 +29,37 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
 
   function generateContent(obj: Answer.answer, index: number) {
     if (obj.type === 'answer') {
-      const paragraph = obj.content.split(/(\n|\r|\r\n)/)
-      return paragraph.map((o, i) => (
-        <p
-          className={clsx(
-            obj.error ? styles.answerError : '',
-            props.inputing &&
-              i === paragraph.length - 1 &&
-              index === props.data.length - 1
-              ? 'cursor-blingking'
-              : ''
-          )}
-          key={i}
-        >
-          {/^\s$/.test(o) ? '' : o.replace(/\s/g, ' ')}
-        </p>
-      ))
+      const settings = getSettingData()
+      const enable_markdown =
+        (settings as ILocalSettings)?.enable_markdown ?? true
+      console.log('enable_markdown:', enable_markdown)
+      if (enable_markdown) {
+        return (
+          <MarkDown
+            className='markdown-container p-[0px_16px]'
+            remarkPlugins={[remarkGfm]}
+          >
+            {obj.content}
+          </MarkDown>
+        )
+      } else {
+        const paragraph = obj.content.split(/(\n|\r|\r\n)/)
+        return paragraph.map((o, i) => (
+          <p
+            className={clsx(
+              obj.error ? styles.answerError : '',
+              props.inputing &&
+                i === paragraph.length - 1 &&
+                index === props.data.length - 1
+                ? 'cursor-blingking'
+                : ''
+            )}
+            key={i}
+          >
+            {/^\s$/.test(o) ? '' : o.replace(/\s/g, ' ')}
+          </p>
+        ))
+      }
     } else if (obj.type === 'question') {
       return obj.content
     } else if (obj.type === 'loading') {

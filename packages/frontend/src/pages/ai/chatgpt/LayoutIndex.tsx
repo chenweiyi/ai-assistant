@@ -1,4 +1,4 @@
-import { SESSION_STORAGE_CONVASITION_CHATGPT_KEY } from '@/constants/constant'
+import { getConvasitionData, setConvasitionData } from '@/utils/store'
 import { getRandomId } from '@/utils/tools'
 import { useLatest } from 'ahooks'
 import clsx from 'clsx'
@@ -80,9 +80,9 @@ function LayoutIndex() {
   }, [])
 
   function initialData() {
-    const res = sessionStorage.getItem(SESSION_STORAGE_CONVASITION_CHATGPT_KEY)
+    const res = getConvasitionData() as IConvasition[]
     if (res) {
-      const data: IConvasition[] = JSON.parse(res)
+      const data: IConvasition[] = res
       data.forEach((item) => {
         // 初始化时，所有的tab都不需要正在输入态
         item.isInput = false
@@ -156,10 +156,7 @@ function LayoutIndex() {
       newResult[index] = data
     }
     if (newResult.length) {
-      sessionStorage.setItem(
-        SESSION_STORAGE_CONVASITION_CHATGPT_KEY,
-        JSON.stringify(newResult)
-      )
+      setConvasitionData(newResult)
     }
   }
 

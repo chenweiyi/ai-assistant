@@ -1,4 +1,4 @@
-import { SESSION_STORAGE_CONVASITION_CHATGPT_KEY } from '@/constants/constant'
+import { CONVASITION_CHATGPT_KEY } from '@/constants/constant'
 import { Modal } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
@@ -25,9 +25,7 @@ export default function PromptModal(props: promptModalProps) {
   }
 
   const makeData = () => {
-    const sessionData = sessionStorage.getItem(
-      SESSION_STORAGE_CONVASITION_CHATGPT_KEY
-    )
+    const sessionData = localStorage.getItem(CONVASITION_CHATGPT_KEY)
     if (sessionData) {
       const data: IConvasition[] = JSON.parse(sessionData) ?? []
       const list: Array<IData> = []

@@ -1,4 +1,4 @@
-import { SESSION_STORAGE_CONVASITION_CHATGPT_KEY } from '@/constants/constant'
+import { getConvasitionData } from '@/utils/store'
 import { RefSelectProps, Select } from 'antd'
 import { forwardRef, useState } from 'react'
 
@@ -27,11 +27,9 @@ function SearchInput(props: SearchInputProps, ref: React.Ref<RefSelectProps>) {
   const [inputValue, setInputValue] = useState<string>('')
 
   const fetch = (value: string, callback: (arr: Array<IData>) => void) => {
-    const sessionData = sessionStorage.getItem(
-      SESSION_STORAGE_CONVASITION_CHATGPT_KEY
-    )
+    const sessionData = getConvasitionData() as IConvasition[]
     if (sessionData) {
-      const data: IConvasition[] = JSON.parse(sessionData) ?? []
+      const data: IConvasition[] = sessionData
       const list: Array<IData> = []
       cacheList = []
       data.forEach((d) => {
