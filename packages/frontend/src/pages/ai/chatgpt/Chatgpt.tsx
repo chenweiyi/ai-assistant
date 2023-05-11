@@ -1,9 +1,13 @@
 import AnswerLayout from '@/components/answer-layout/AnswerLayout'
 import { ChatContext } from '@/pages/ai/chatgpt/LayoutIndex'
-import { getSettingData } from '@/utils/store'
+import {
+  ILocalSettings,
+  getConvasitionData,
+  getSettingData
+} from '@/utils/store'
 import { PlusCircleOutlined } from '@ant-design/icons'
 import { useLatest } from 'ahooks'
-import { Input, InputRef } from 'antd'
+import { Drawer, Input, InputRef, Tag } from 'antd'
 import qs from 'qs'
 import {
   BaseSyntheticEvent,
@@ -14,7 +18,8 @@ import {
 } from 'react'
 
 import styles from './chatgpt.less'
-import PromptModal from './components/PromptModal'
+import PromptCustom from './components/PromptCustom'
+import PromptWeek from './components/PromptWeek'
 
 type RequestOption = {
   msg: string
@@ -40,8 +45,29 @@ export default function IndexPage() {
   const [disabled, setDisabled] = useState(false)
   const inputRef = useRef<InputRef>(null)
   const [open, setOpen] = useState(false)
+  const [title, setTitle] = useState('')
+  const [drawer, setDrawer] = useState(false)
+  const [type, setType] = useState<'prompt' | 'week' | ''>('')
 
   const latestResultRef = useLatest(result)
+  const lastInputValue = useLatest(inputValue)
+
+  const [latestQuestion, setLatestQuestion] = useState<string>('')
+
+  const openDrawer = (type: 'prompt' | 'week') => {
+    return () => {
+      setType(type)
+      setDrawer(true)
+    }
+  }
+
+  useEffect(() => {
+    if (type === 'prompt') {
+      setTitle('提示词')
+    } else if (type === 'week') {
+      setTitle('写周报')
+    }
+  }, [type])
 
   /**
    * 采用EventSource模式获取数据
@@ -49,7 +75,7 @@ export default function IndexPage() {
    * @param sessionId
    */
   async function getConstantMsg(meta: RequestOption, sessionId: string) {
-    const settings = getSettingData()
+    const settings = getSettingData() as ILocalSettings
     const source = new EventSource(
       `/q/sendMsg/sse?${qs.stringify({
         apiKey: settings?.apiKey,
@@ -162,37 +188,37 @@ export default function IndexPage() {
 
   // 点击“发送”按钮发送消息事件
   function sendMsg(sessionId: string) {
-    return () => {
-      if (inputValue) {
-        // 存入数据及loading数据
-        const datas = [
-          {
-            type: 'question' as 'question',
-            ownerId,
-            ownerName,
-            content: inputValue,
-            id: Date.now() + ''
-          },
-          {
-            type: 'loading' as 'loading',
-            content: '',
-            id: 'loading_' + Date.now()
-          }
-        ]
-        // 存储问题及loading
-        setResultDataBySessionId({ append: datas, isLoading: true }, sessionId)
-        // 发送请求获取chatgpt的回复
-        getConstantMsg({ msg: inputValue }, sessionId)
-      }
-      if (sessionId === active?.sessionId) {
-        // 清空输入框
-        setInputValue('')
-      }
+    if (lastInputValue.current) {
+      // 存入数据及loading数据
+      const datas = [
+        {
+          type: 'question' as 'question',
+          ownerId,
+          ownerName,
+          content: lastInputValue.current,
+          id: Date.now() + ''
+        },
+        {
+          type: 'loading' as 'loading',
+          content: '',
+          id: 'loading_' + Date.now()
+        }
+      ]
+      // 存储问题及loading
+      setResultDataBySessionId({ append: datas, isLoading: true }, sessionId)
+      // 发送请求获取chatgpt的回复
+      getConstantMsg({ msg: lastInputValue.current }, sessionId)
+      // 最后一条问题
+      setLatestQuestion(lastInputValue.current)
+    }
+    if (sessionId === active?.sessionId) {
+      // 清空输入框
+      setInputValue('')
     }
   }
 
   function pressEnterHandler() {
-    sendMsg(active?.sessionId as string)()
+    sendMsg(active?.sessionId as string)
   }
 
   // 聚焦输入框
@@ -220,17 +246,49 @@ export default function IndexPage() {
     }
   }
 
-  function choosePromptHandler(prompt: string) {
+  /**
+   * 动态输入提示词
+   * @param value
+   * @returns
+   */
+  function setFlowValue(value: string) {
+    return new Promise<void>((resolve, reject) => {
+      function flow(str: string, val: string) {
+        if (str === val) {
+          resolve()
+          return
+        }
+        setTimeout(() => {
+          const next = val.slice(0, str.length + 2)
+          setInputValue(next)
+          flow(next, val)
+        }, 10)
+        setInputValue(str)
+      }
+      flow(value.slice(0, 1), value)
+    })
+  }
+
+  /**
+   * 快捷方式通用回调
+   * @param prompt
+   */
+  async function choosePromptHandler(prompt: string) {
     focusInput()
-    setInputValue(prompt)
-    setOpen(false)
+    setDrawer(false)
+    await setFlowValue(prompt)
+    sendMsg(active?.sessionId as string)
   }
 
   function handleKeyDown(e: any) {
-    console.log('inputKeyUpHandler:', e)
     if (e.ctrlKey && e.key === 'o') {
       setOpen(true)
     }
+  }
+
+  async function reAnswer() {
+    await setFlowValue(latestQuestion)
+    sendMsg(active?.sessionId as string)
   }
 
   function addEvent() {
@@ -275,8 +333,32 @@ export default function IndexPage() {
       <div className={styles.card}>
         <AnswerLayout data={result} inputing={isInput} isLoading={isLoading} />
       </div>
+      <div className={styles.operation}>
+        <Tag
+          className='cursor-pointer hover:font-medium hover:italic'
+          color='magenta'
+          onClick={reAnswer}
+        >
+          重新回答上一个问题
+        </Tag>
+        <Tag
+          className='cursor-pointer hover:font-medium hover:italic'
+          color='red'
+          onClick={openDrawer('prompt')}
+        >
+          提示词
+        </Tag>
+        <Tag
+          className='cursor-pointer hover:font-mediumv hover:italic'
+          color='volcano'
+          onClick={openDrawer('week')}
+        >
+          写周报
+        </Tag>
+      </div>
       <div className={styles.questionWrapper}>
-        <Input
+        <Input.TextArea
+          autoSize={{ minRows: 1 }}
           ref={inputRef}
           className={styles.input}
           size='large'
@@ -286,7 +368,6 @@ export default function IndexPage() {
           onChange={changeInput}
           onPressEnter={pressEnterHandler}
           disabled={disabled}
-          prefix={<PlusCircleOutlined onClick={() => setOpen(true)} />}
         />
         <button
           disabled={disabled || !inputValue}
@@ -295,16 +376,28 @@ export default function IndexPage() {
           style={{
             cursor: disabled || !inputValue ? 'not-allowed' : 'pointer'
           }}
-          onClick={sendMsg(active?.sessionId as string)}
+          onClick={() => sendMsg(active?.sessionId as string)}
         >
           发送
         </button>
       </div>
-      <PromptModal
+      <Drawer
+        width={800}
+        title={title}
+        open={drawer}
+        onClose={() => setDrawer(false)}
+      >
+        {type === 'prompt' ? (
+          <PromptCustom choosePrompt={choosePromptHandler} />
+        ) : (
+          <PromptWeek generateWeekReport={choosePromptHandler} />
+        )}
+      </Drawer>
+      {/* <PromptModal
         open={open}
         setOpen={setOpen}
         choosePrompt={choosePromptHandler}
-      />
+      /> */}
     </div>
   )
 }

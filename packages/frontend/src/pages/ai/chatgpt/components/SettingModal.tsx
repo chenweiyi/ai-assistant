@@ -51,7 +51,7 @@ export default function SettingModal(props: SettingModalProps) {
 
   useEffect(() => {
     if (props.open) {
-      const data = getSettingData()
+      const data = getSettingData() as ILocalSettings
       if (data) {
         forEach(data, (value, key) => {
           formRef.current?.setFieldValue(key, value)

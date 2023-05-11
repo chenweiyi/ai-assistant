@@ -1,16 +1,6 @@
 import { CONVASITION_CHATGPT_KEY } from '@/constants/constant'
-import { Modal, Tabs } from 'antd'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
-
-import PromptCustom from './PromptCustom'
-import PromptWeek from './PromptWeek'
-
-export interface promptModalProps {
-  open: boolean
-  setOpen: (open: boolean) => void
-  choosePrompt: (prompt: string) => void
-}
 
 export interface IData {
   value: string
@@ -18,15 +8,11 @@ export interface IData {
   count?: number
 }
 
-export default function PromptModal(props: promptModalProps) {
-  const ok = () => {
-    props.setOpen(false)
-  }
+interface CustomPropmtProps {
+  choosePrompt: (prompt: string) => void
+}
 
-  const cancel = () => {
-    props.setOpen(false)
-  }
-
+export default function CustomPropmt(props: CustomPropmtProps) {
   const makeData = () => {
     const sessionData = localStorage.getItem(CONVASITION_CHATGPT_KEY)
     if (sessionData) {
@@ -55,38 +41,48 @@ export default function PromptModal(props: promptModalProps) {
   }
 
   const [data, setData] = useState<Array<IData>>([]) // 历史数据
-  const tabItems = [
-    {
-      key: 'custom',
-      label: '历史数据',
-      children: <PromptCustom data={data} choosePrompt={props.choosePrompt} />
-    },
-    {
-      key: 'write-week',
-      label: '写周报',
-      children: <PromptWeek></PromptWeek>
+
+  const selectPrompt = (item: IData) => {
+    return () => {
+      props.choosePrompt(item.label)
     }
-  ]
+  }
 
   useEffect(() => {
-    if (props.open) {
-      makeData()
-    }
-  }, [props.open])
+    makeData()
+  }, [])
 
   return (
-    <Modal
-      title='提示词'
-      open={props.open}
-      onOk={ok}
-      onCancel={cancel}
-      okText='确定'
-      cancelText='取消'
-      width={800}
+    <div
+      className={clsx(
+        'prompt-custom-container',
+        'grid',
+        'grid-cols-2',
+        'gap-1'
+      )}
     >
-      <div className={clsx('prompt-container', 'p-20px')}>
-        <Tabs items={tabItems} />
-      </div>
-    </Modal>
+      {data.map((item) => {
+        return (
+          <div
+            className={clsx(
+              'prompt-item',
+              'my-1',
+              'p-2',
+              'cursor-pointer',
+              'rounded-1',
+              'border',
+              'border-solid',
+              'border-gray-300',
+              'hover:border-blue-500',
+              'hover:color-blue-500'
+            )}
+            key={item.value}
+            onClick={selectPrompt(item)}
+          >
+            <div className='prompt-item-label'>{item.label}</div>
+          </div>
+        )
+      })}
+    </div>
   )
 }

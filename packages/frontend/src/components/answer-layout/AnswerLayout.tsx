@@ -33,7 +33,7 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
       const enable_markdown =
         (settings as ILocalSettings)?.enable_markdown ?? true
       console.log('enable_markdown:', enable_markdown)
-      if (enable_markdown) {
+      if (enable_markdown && !obj.error) {
         return (
           <MarkDown
             className='markdown-container p-[0px_16px]'
