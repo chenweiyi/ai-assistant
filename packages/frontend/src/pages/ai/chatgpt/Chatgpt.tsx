@@ -5,7 +5,6 @@ import {
   getConvasitionData,
   getSettingData
 } from '@/utils/store'
-import { PlusCircleOutlined } from '@ant-design/icons'
 import { useLatest } from 'ahooks'
 import { Drawer, Input, InputRef, Tag } from 'antd'
 import qs from 'qs'
@@ -217,8 +216,11 @@ export default function IndexPage() {
     }
   }
 
-  function pressEnterHandler() {
-    sendMsg(active?.sessionId as string)
+  function pressEnterHandler(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    // 按下ctrl + enter发送消息
+    if (e.ctrlKey) {
+      sendMsg(active?.sessionId as string)
+    }
   }
 
   // 聚焦输入框
