@@ -156,6 +156,9 @@ importers:
       '@ant-design/pro-components':
         specifier: ^2.0.1
         version: registry.npmmirror.com/@ant-design/pro-components@2.0.1(@types/lodash.merge@4.6.7)(antd@5.5.0)(prop-types@15.8.1)(rc-field-form@1.31.0)(react-dom@17.0.2)(react@16.14.0)
+      '@iconify/json':
+        specifier: ^2.2.67
+        version: registry.npmmirror.com/@iconify/json@2.2.67
       '@types/uuid':
         specifier: ^9.0.1
         version: registry.npmmirror.com/@types/uuid@9.0.1
@@ -4228,6 +4231,15 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz}
     name: '@humanwhocodes/object-schema'
     version: 1.2.1
+    dev: false
+
+  registry.npmmirror.com/@iconify/json@2.2.67:
+    resolution: {integrity: sha512-yRA3PTP9JW8eT+rtUGF5HLFtKT0l9BVJsvFqKvg1zIVzPRc04fFzJVrF5qxZwSN25ttZAe3LUXUmH7rwI5GGEw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@iconify/json/-/json-2.2.67.tgz}
+    name: '@iconify/json'
+    version: 2.2.67
+    dependencies:
+      '@iconify/types': registry.npmmirror.com/@iconify/types@2.0.0
+      pathe: registry.npmmirror.com/pathe@1.1.0
     dev: false
 
   registry.npmmirror.com/@iconify/types@2.0.0:

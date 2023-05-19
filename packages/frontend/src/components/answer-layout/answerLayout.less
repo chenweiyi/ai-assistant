@@ -1,33 +1,9 @@
-.modifyBrowserScrollStyle {
-  // 滚动条整体部分
-  &::-webkit-scrollbar {
-    width: 4px;
-    height: 0;
-    background-color: #f1f1f1;
-
-    &:hover {
-      background-color: #d1d1d1;
-    }
-  }
-  // 滚动条的轨道（里面装有Thumb）
-  &::-webkit-scrollbar-track {
-    border-radius: 2px;
-  }
-  // 滚动条里面的小方块
-  &::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-    background-color: green;
-    transition: all 0.2s;
-  }
-}
-
 .container {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 0 8px;
-  .modifyBrowserScrollStyle();
 
   .ul {
     list-style: none;

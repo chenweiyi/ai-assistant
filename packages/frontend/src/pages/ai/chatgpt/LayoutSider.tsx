@@ -78,12 +78,17 @@ export default function LayoutSider() {
                   key={item.sessionId}
                   onClick={toggle(item.sessionId)}
                 >
+                  <div className='i-ep-chat-line-square mr-8px'></div>
                   <div className={styles.liTitle}>{getTitle(item)}</div>
-                  <div className={styles.liBtns}>
+                  {/* <div className={styles.liBtns}>
                     <button type='button' onClick={deleteItem(item)}>
                       删除
                     </button>
-                  </div>
+                  </div> */}
+                  <div
+                    className='i-mingcute-delete-2-line cursor-pointer'
+                    onClick={deleteItem(item)}
+                  ></div>
                 </li>
               )
             })}

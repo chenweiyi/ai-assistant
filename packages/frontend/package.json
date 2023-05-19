@@ -18,6 +18,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-components": "^2.0.1",
+    "@iconify/json": "^2.2.67",
     "@types/uuid": "^9.0.1",
     "@umijs/max": "^4.0.64",
     "@umijs/plugins": "^4.0.67",
