@@ -20,3 +20,5 @@ packages/backend/build
 node_modules
 .umi
 .umi-production
+
+gptcommit.toml
