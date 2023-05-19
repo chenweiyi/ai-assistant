@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "chrome",
+      "request": "launch",
+      "name": "chrome调试项目",
+      "url": "http://localhost:8000",
+      "webRoot": "${workspaceFolder}/packages/frontend",
+      "runtimeArgs": ["--auto-open-devtools-for-tabs"],
+      "userDataDir": false
+    },
+    {
       "name": "调试max lint",
       "program": "//Users/zyb/my/ai-assistant/node_modules/.pnpm/registry.npmmirror.com+@umijs+max@4.0.64_@babel+core@7.21.4_@types+lodash.merge@4.6.7_@types+_wkagvk5gqshzow3kjjvwols4oq/node_modules/@umijs/max/dist/cli.js",
       "request": "launch",

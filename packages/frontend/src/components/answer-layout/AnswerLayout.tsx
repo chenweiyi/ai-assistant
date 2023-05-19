@@ -3,9 +3,16 @@ import { ILocalSettings, getSettingData } from '@/utils/store'
 import clsx from 'clsx'
 import { useEffect, useRef } from 'react'
 import MarkDown from 'react-markdown'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import {
+  atomDark,
+  dark,
+  prism
+} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import remarkGfm from 'remark-gfm'
 
 import styles from './answerLayout.less'
+import './markdown.less'
 
 type AnswerLayoutProps = {
   data: Answer.answer[]
@@ -34,12 +41,49 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
         (settings as ILocalSettings)?.enable_markdown ?? true
       console.log('enable_markdown:', enable_markdown)
       if (enable_markdown && !obj.error) {
+        const code_content = `Here is some JavaScript code:
+
+~~~js
+console.log('It works!')
+~~~
+`
+        const table_content = `| 操作 | 数组 | 当前地址 | 指针 | 当前显示组件 |
+| ---- | ---- | ---- | ---- | ---- |
+| - | [home, A] | /A | A | [home, A] |
+| ➡️ push | [home, A, A1] | /A1 | A1 | [A, A1] |
+| 后退 | [home, A, A1] | /A | A | [home, A] |
+| 前进 | [home, A, A1] | /A1 | A1 | [A, A1] |
+`
+
         return (
           <MarkDown
-            className='markdown-container p-[0px_16px]'
+            className='markdown-container markdown-body p-[0px_16px] bg-transparent!'
             remarkPlugins={[remarkGfm]}
+            rehypePlugins={[]}
+            components={{
+              code({ node, inline, className, children, ...props }) {
+                console.log(node, inline, className, children, props)
+                const match = /language-(\w+)/.exec(className || '')
+                return !inline && match ? (
+                  <SyntaxHighlighter
+                    {...props}
+                    style={atomDark}
+                    language={match[1]}
+                    PreTag='div'
+                  >
+                    {String(children).replace(/\n$/, '')}
+                  </SyntaxHighlighter>
+                ) : (
+                  <code {...props} className={className}>
+                    {children}
+                  </code>
+                )
+              }
+            }}
           >
             {obj.content}
+            {/* {code_content} */}
+            {/* {table_content} */}
           </MarkDown>
         )
       } else {
