@@ -22,6 +22,11 @@ export default defineConfig({
   request: {},
   layout: false,
   mock: false,
+  mfsu: false,
+  chainWebpack(memo, args) {
+    // console.log('memo', memo)
+    memo.optimization.minimize(false)
+  },
   routes: [
     { path: '/', redirect: '/ai/chatgpt' },
     {

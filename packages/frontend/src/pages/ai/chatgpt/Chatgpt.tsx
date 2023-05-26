@@ -7,6 +7,7 @@ import {
 } from '@/utils/store'
 import { useLatest } from 'ahooks'
 import { Drawer, Input, InputRef, Tag } from 'antd'
+import clsx from 'clsx'
 import qs from 'qs'
 import {
   BaseSyntheticEvent,
@@ -332,7 +333,7 @@ export default function IndexPage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.card}>
+      <div className={clsx([styles.card])}>
         <AnswerLayout data={result} inputing={isInput} isLoading={isLoading} />
       </div>
       <div className={styles.operation}>
@@ -395,11 +396,6 @@ export default function IndexPage() {
           <PromptWeek generateWeekReport={choosePromptHandler} />
         )}
       </Drawer>
-      {/* <PromptModal
-        open={open}
-        setOpen={setOpen}
-        choosePrompt={choosePromptHandler}
-      /> */}
     </div>
   )
 }

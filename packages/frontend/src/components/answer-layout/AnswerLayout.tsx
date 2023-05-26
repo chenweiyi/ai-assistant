@@ -1,7 +1,10 @@
 import WaveLoading from '@/components/loading/WaveLoading'
+import copyToClipboard from '@/utils/copy'
 import { ILocalSettings, getSettingData } from '@/utils/store'
+import rehypePrism from '@mapbox/rehype-prism'
+import { message } from 'antd'
 import clsx from 'clsx'
-import { useEffect, useRef } from 'react'
+import { SyntheticEvent, useEffect, useRef } from 'react'
 import MarkDown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import {
@@ -9,6 +12,7 @@ import {
   dark,
   prism
 } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import rehypeHighlight from 'rehype-highlight'
 import remarkGfm from 'remark-gfm'
 
 import styles from './answerLayout.less'
@@ -20,7 +24,22 @@ type AnswerLayoutProps = {
   isLoading: boolean
 }
 
+const code_content = `Here is \`some\` JavaScript code:
+
+~~~
+console.log('It works!')
+~~~
+`
+const table_content = `| 操作 | 数组 | 当前地址 | 指针 | 当前显示组件 |
+| ---- | ---- | ---- | ---- | ---- |
+| - | [home, A] | /A | A | [home, A] |
+| ➡️ push | [home, A, A1] | /A1 | A1 | [A, A1] |
+| 后退 | [home, A, A1] | /A | A | [home, A] |
+| 前进 | [home, A, A1] | /A1 | A1 | [A, A1] |
+`
+
 export default function AnswerLayout(props: AnswerLayoutProps) {
+  // const [messageApi, contextHolder] = message.useMessage()
   const ref = useRef<HTMLDivElement>(null)
   const stylesName = {
     question: styles.questionType,
@@ -40,39 +59,63 @@ export default function AnswerLayout(props: AnswerLayoutProps) {
       const enable_markdown =
         (settings as ILocalSettings)?.enable_markdown ?? true
       console.log('enable_markdown:', enable_markdown)
+
+      function copyCode(e: SyntheticEvent) {
+        copyToClipboard(
+          e.currentTarget?.nextSibling?.firstChild?.textContent ?? ''
+        )
+          .then(() => {
+            message.success('复制成功')
+          })
+          .catch(() => {
+            message.error('复制失败')
+          })
+      }
+
       if (enable_markdown && !obj.error) {
-        const code_content = `Here is some JavaScript code:
-
-~~~js
-console.log('It works!')
-~~~
-`
-        const table_content = `| 操作 | 数组 | 当前地址 | 指针 | 当前显示组件 |
-| ---- | ---- | ---- | ---- | ---- |
-| - | [home, A] | /A | A | [home, A] |
-| ➡️ push | [home, A, A1] | /A1 | A1 | [A, A1] |
-| 后退 | [home, A, A1] | /A | A | [home, A] |
-| 前进 | [home, A, A1] | /A1 | A1 | [A, A1] |
-`
-
         return (
           <MarkDown
             className='markdown-container markdown-body p-[0px_16px] bg-transparent!'
+            skipHtml={true}
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[]}
             components={{
               code({ node, inline, className, children, ...props }) {
-                console.log(node, inline, className, children, props)
+                console.log(
+                  'markdown: ',
+                  node,
+                  inline,
+                  className,
+                  children,
+                  props
+                )
                 const match = /language-(\w+)/.exec(className || '')
-                return !inline && match ? (
-                  <SyntaxHighlighter
-                    {...props}
-                    style={atomDark}
-                    language={match[1]}
-                    PreTag='div'
-                  >
-                    {String(children).replace(/\n$/, '')}
-                  </SyntaxHighlighter>
+                return !inline ? (
+                  <div className={clsx(['relative'])}>
+                    <span
+                      className={clsx([
+                        'absolute',
+                        'top-2px',
+                        'right-4px',
+                        'p-[4px_8px]',
+                        'color-[rgb(179,179,179)]',
+                        'hover-color-[#65a665]',
+                        'cursor-pointer',
+                        'text-[12px]'
+                      ])}
+                      onClick={copyCode}
+                    >
+                      复制代码
+                    </span>
+                    <SyntaxHighlighter
+                      {...props}
+                      style={prism}
+                      language={match?.[1]}
+                      PreTag='div'
+                    >
+                      {String(children).replace(/\n$/, '')}
+                    </SyntaxHighlighter>
+                  </div>
                 ) : (
                   <code {...props} className={className}>
                     {children}
