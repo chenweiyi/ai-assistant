@@ -13,10 +13,6 @@ import { isNil } from 'lodash-es'
 import fetch from 'node-fetch'
 import { PassThrough } from 'stream'
 
-import { OPENAI_API_KEY } from '../consts/key.mjs'
-import { CHATGPT_REQUEST_TIMEOUT } from '../consts/request.mjs'
-import { ENABLE_PROXY, PROXY_ADDRESS } from '../consts/server.mjs'
-
 const debug = debugLibrary('message')
 const chatgptApiMap = new Map<string, ChatGPTAPI>()
 
@@ -33,17 +29,17 @@ export default class MessageController {
       ctx.request.query as any
     if (!chatgptApiMap.get(ownerId)) {
       const api = new ChatGPTAPI({
-        apiKey: apiKey || OPENAI_API_KEY,
+        apiKey: apiKey || process.env.OPENAI_API_KEY,
         completionParams: {
           model: model || 'gpt-3.5-turbo',
           temperature: isNil(temperature) ? 0.8 : +temperature,
           top_p: isNil(top_p) ? 1 : +top_p
         },
         // @ts-ignore
-        fetch: ENABLE_PROXY
+        fetch: process.env.PROXY_ADDRESS
           ? (url, options = {}) => {
               const defaultOptions = {
-                agent: proxy(PROXY_ADDRESS)
+                agent: proxy(process.env.PROXY_ADDRESS)
               }
               const mergedOptions = {
                 ...defaultOptions,
@@ -92,7 +88,7 @@ export default class MessageController {
             // debug('onProgress data:', data)
             events.emit('data', data)
           },
-          timeoutMs: CHATGPT_REQUEST_TIMEOUT,
+          timeoutMs: +process.env.CHATGPT_REQUEST_TIMEOUT,
           ...(parentMessageId
             ? {
                 parentMessageId

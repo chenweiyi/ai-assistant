@@ -77,6 +77,9 @@ importers:
       debug:
         specifier: ^4.1.1
         version: registry.npmmirror.com/debug@4.1.1
+      dotenv:
+        specifier: ^16.0.3
+        version: registry.npmmirror.com/dotenv@16.0.3
       https-proxy-agent:
         specifier: ^5.0.1
         version: registry.npmmirror.com/https-proxy-agent@5.0.1
@@ -10044,6 +10047,13 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       type-fest: registry.npmmirror.com/type-fest@2.19.0
+    dev: false
+
+  registry.npmmirror.com/dotenv@16.0.3:
+    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/dotenv/-/dotenv-16.0.3.tgz}
+    name: dotenv
+    version: 16.0.3
+    engines: {node: '>=12'}
     dev: false
 
   registry.npmmirror.com/dotenv@5.0.1:

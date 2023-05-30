@@ -2,7 +2,7 @@ import { SettingOutlined, UserOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import clsx from 'clsx'
 import { findLast } from 'lodash-es'
-import { SyntheticEvent, useContext, useState } from 'react'
+import { SyntheticEvent, useContext, useEffect, useState } from 'react'
 
 import { ChatContext } from './LayoutIndex'
 import AccountModal from './components/AccountModal'
@@ -69,29 +69,32 @@ export default function LayoutSider() {
         </div>
         <div className={clsx(styles.content)}>
           <ul className={styles.menusUl}>
-            {result.map((item) => {
-              return (
-                <li
-                  className={clsx(styles.menusLi, {
-                    [styles.active]: item.active
-                  })}
-                  key={item.sessionId}
-                  onClick={toggle(item.sessionId)}
-                >
-                  <div className='i-ep-chat-line-square mr-8px'></div>
-                  <div className={styles.liTitle}>{getTitle(item)}</div>
-                  {/* <div className={styles.liBtns}>
+            {result
+              .slice()
+              .reverse()
+              .map((item) => {
+                return (
+                  <li
+                    className={clsx(styles.menusLi, {
+                      [styles.active]: item.active
+                    })}
+                    key={item.sessionId}
+                    onClick={toggle(item.sessionId)}
+                  >
+                    <div className='i-ep-chat-line-square mr-8px'></div>
+                    <div className={styles.liTitle}>{getTitle(item)}</div>
+                    {/* <div className={styles.liBtns}>
                     <button type='button' onClick={deleteItem(item)}>
                       删除
                     </button>
                   </div> */}
-                  <div
-                    className='i-mingcute-delete-2-line cursor-pointer'
-                    onClick={deleteItem(item)}
-                  ></div>
-                </li>
-              )
-            })}
+                    <div
+                      className='i-mingcute-delete-2-line cursor-pointer'
+                      onClick={deleteItem(item)}
+                    ></div>
+                  </li>
+                )
+              })}
           </ul>
         </div>
         <div className={styles.bottomDiv}>
@@ -100,14 +103,15 @@ export default function LayoutSider() {
             shape='default'
             icon={<SettingOutlined />}
             size='middle'
+            flex-1=''
             style={{
-              marginBottom: '8px'
+              marginBottom: '0px'
             }}
             onClick={() => setOpenSetting(true)}
           >
             设置
           </Button>
-          <Button
+          {/* <Button
             type='default'
             shape='default'
             icon={<UserOutlined />}
@@ -115,7 +119,7 @@ export default function LayoutSider() {
             onClick={() => setOpenAccount(true)}
           >
             账户
-          </Button>
+          </Button> */}
         </div>
       </div>
       <AccountModal open={openAccount} setOpen={setOpenAccount}></AccountModal>

@@ -12,7 +12,6 @@ packages/frontend/.cache
 packages/frontend/dist
 
 # 后端
-packages/backend/src/consts/key.mjs
 packages/backend/build
 
 
@@ -20,5 +19,6 @@ packages/backend/build
 node_modules
 .umi
 .umi-production
+.env
 
 gptcommit.toml

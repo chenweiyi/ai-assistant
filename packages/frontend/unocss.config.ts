@@ -1,18 +1,28 @@
-import { defineConfig, presetAttributify, presetIcons, presetUno } from 'unocss'
+import {
+  defineConfig,
+  presetAttributify,
+  presetIcons,
+  presetTypography,
+  presetUno,
+  transformerAttributifyJsx
+} from 'unocss'
 
-export function createConfig({ strict = true, dev = true } = {}) {
+export function createConfig({ dev = true } = {}) {
   return defineConfig({
     envMode: dev ? 'dev' : 'build',
     presets: [
-      presetAttributify({ strict }),
       presetUno(),
+      presetAttributify(),
       presetIcons({
         prefix: 'i-',
         extraProperties: {
-          display: 'inline-block'
+          display: 'inline-block',
+          'vertical-align': 'middle'
         }
-      })
-    ]
+      }),
+      presetTypography()
+    ],
+    transformers: [transformerAttributifyJsx()]
   })
 }
 

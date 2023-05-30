@@ -7,7 +7,6 @@ import debugLibrary from 'debug'
 import http from 'http'
 
 import app from '../app.mjs'
-import { SERVER_PORT } from '../consts/server.mjs'
 import '../utils/abortControllerPolyfill.mjs'
 import '../utils/fetchPolyfill.mjs'
 
@@ -17,7 +16,7 @@ const debug = debugLibrary('server')
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || SERVER_PORT)
+var port = normalizePort(process.env.SERVER_PORT || '3000')
 // app.set('port', port);
 
 /**

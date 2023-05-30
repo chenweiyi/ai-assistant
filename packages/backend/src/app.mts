@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv'
 import debugLibrary from 'debug'
 import Koa from 'koa'
 import history from 'koa2-history-api-fallback'
@@ -12,6 +13,8 @@ import path from 'path'
 import message from './routes/message.mjs'
 import users from './routes/users.mjs'
 import conditional from './utils/koa-conditional-get.mjs'
+
+dotenv.config()
 
 let app = new Koa()
 const debug = debugLibrary('app')

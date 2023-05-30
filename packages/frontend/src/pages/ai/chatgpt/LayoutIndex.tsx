@@ -5,6 +5,7 @@ import clsx from 'clsx'
 import {
   Dispatch,
   SetStateAction,
+  StrictMode,
   createContext,
   useEffect,
   useState
@@ -223,40 +224,42 @@ function LayoutIndex() {
   }
 
   return (
-    <ChatContext.Provider
-      value={{
-        result,
-        active,
-        setResult,
-        setResultDataBySessionId,
-        storageData,
-        addResult,
-        deleteResult,
-        toggleActive,
-        getConvasitionBySessionId,
-        setResultBySessionId,
-        getActiveResult
-      }}
-    >
-      <div
-        className={clsx(
-          'flex',
-          'flex-row',
-          'items-center',
-          'w-100%',
-          'h-100%',
-          'p-200px',
-          'pt-100px',
-          'pb-100px',
-          styles.layout
-        )}
+    <>
+      <ChatContext.Provider
+        value={{
+          result,
+          active,
+          setResult,
+          setResultDataBySessionId,
+          storageData,
+          addResult,
+          deleteResult,
+          toggleActive,
+          getConvasitionBySessionId,
+          setResultBySessionId,
+          getActiveResult
+        }}
       >
-        <div className={styles.layoutAi}>
-          <LayoutSider />
-          <Chatgpt />
+        <div
+          className={clsx(
+            'flex',
+            'flex-row',
+            'items-center',
+            'w-100%',
+            'h-100%',
+            'p-200px',
+            'pt-100px',
+            'pb-100px',
+            styles.layout
+          )}
+        >
+          <div className={styles.layoutAi}>
+            <LayoutSider />
+            <Chatgpt />
+          </div>
         </div>
-      </div>
-    </ChatContext.Provider>
+      </ChatContext.Provider>
+    </>
   )
 }
 

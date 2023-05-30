@@ -35,6 +35,7 @@
     "chatgpt": "^5.2.2",
     "dayjs": "^1.11.7",
     "debug": "^4.1.1",
+    "dotenv": "^16.0.3",
     "https-proxy-agent": "^5.0.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",

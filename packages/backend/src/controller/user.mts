@@ -9,8 +9,7 @@ import proxy from 'https-proxy-agent'
 import Koa from 'koa'
 import fetch from 'node-fetch'
 
-import { ACCOUNT_AUTHORIZATION, ACCOUNT_ORGANIZATION } from '../consts/key.mjs'
-import { PROXY_ADDRESS } from '../consts/server.mjs'
+// import { ACCOUNT_AUTHORIZATION, ACCOUNT_ORGANIZATION } from '../consts/key.mjs'
 
 const debug = debugLibrary('user')
 
@@ -21,8 +20,8 @@ export default class UserController {
    */
   public static async getUserInfo(ctx: Koa.Context) {
     const {
-      authorization = ACCOUNT_AUTHORIZATION,
-      openaiOrganization = ACCOUNT_ORGANIZATION,
+      authorization,
+      openaiOrganization,
       origin = 'https://platform.openai.com',
       referer = 'https://platform.openai.com/'
     } = ctx.request.query as any
@@ -38,7 +37,7 @@ export default class UserController {
             origin,
             referer
           },
-          agent: proxy(PROXY_ADDRESS)
+          agent: proxy(process.env.PROXY_ADDRESS)
         }
       )
       const data: any = await res.json()
