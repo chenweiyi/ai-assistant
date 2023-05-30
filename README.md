@@ -37,7 +37,7 @@ API_REVERSE_PROXY=
 - `OPENAI_API_KEY`: Indicates that official OpenAI APIs will be used to access chatgpt.
 - `PROXY_ADDRESS`: Scientific Internet access proxy configuration, for example: http://xxx.
 - `OPENAI_ACCESS_TOKEN`: Indicates that unofficial APIs will be used to access chatgpt.
-- `API_REVERSE_PROXY`: Indicates available unofficial reverse proxies. By default it adopts "https://ai.fakeopen.com/api/conversation". For details please refer [here](https://github.com/transitive-bullshit/chatgpt-api/tree/main #reverse-proxy).
+- `API_REVERSE_PROXY`: Indicates available unofficial reverse proxies. By default it adopts "https://ai.fakeopen.com/api/conversation". For details please refer [transitive-bullshit 大佬](https://github.com/transitive-bullshit/chatgpt-api/tree/main#reverse-proxy).
 
 > If both `OPENAI_API_KEY` and `OPENAI_ACCESS_TOKEN` are configured, `OPENAI_API_KEY` will be given priority.
 
