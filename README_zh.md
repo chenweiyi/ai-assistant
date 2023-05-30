@@ -24,7 +24,22 @@ OPENAI_API_KEY=
 # PROXY_ADDRESS represents an http proxy. If left blank or not passed any value, it means that the http proxy is not enabled.
 PROXY_ADDRESS=
 
+# change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
+OPENAI_ACCESS_TOKEN=
+
+# Reverse Proxy - Available on accessToken
+# Default: https://ai.fakeopen.com/api/conversation
+# More: https://github.com/transitive-bullshit/chatgpt-api#reverse-proxy
+API_REVERSE_PROXY=
+
 ```
+
+- `OPENAI_API_KEY`: 表示会使用 openAI 的官方 api 访问 chatgpt
+- `PROXY_ADDRESS`: 科学上网的代理配置，比如：http://xxx
+- `OPENAI_ACCESS_TOKEN`: 表示会使用非官方 API 访问 chatgpt
+- `API_REVERSE_PROXY`: 表示可用的非官方反向代理，默认采用 `https://ai.fakeopen.com/api/conversation` , 具体请参考[这里](https://github.com/transitive-bullshit/chatgpt-api/tree/main#reverse-proxy)
+
+> 如果同时配置了 `OPENAI_API_KEY` 和 `OPENAI_ACCESS_TOKEN` 则优先取 `OPENAI_API_KEY`。
 
 ## 如何使用？
 

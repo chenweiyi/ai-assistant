@@ -4,7 +4,12 @@
  * @Last Modified by: chenweiyi
  * @Last Modified time: 2023-02-21 15:54:08
  */
-import { ChatGPTAPI, ChatMessage } from 'chatgpt'
+import {
+  ChatGPTAPI,
+  ChatGPTAPIOptions,
+  ChatGPTUnofficialProxyAPI,
+  ChatMessage
+} from 'chatgpt'
 import debugLibrary from 'debug'
 import { EventEmitter } from 'events'
 import proxy from 'https-proxy-agent'
@@ -13,11 +18,27 @@ import { isNil } from 'lodash-es'
 import fetch from 'node-fetch'
 import { PassThrough } from 'stream'
 
+interface GenerateChatGPTAPIProps extends ChatGPTAPIOptions {
+  accessToken: string | undefined
+  API_REVERSE_PROXY: string | undefined
+}
+
 const debug = debugLibrary('message')
-const chatgptApiMap = new Map<string, ChatGPTAPI>()
+const chatgptApiMap = new Map<string, ChatGPTAPI | ChatGPTUnofficialProxyAPI>()
 
 const events = new EventEmitter()
 events.setMaxListeners(0)
+
+function GenerateChatGPTAPI(props: GenerateChatGPTAPIProps) {
+  if (props.accessToken) {
+    return new ChatGPTUnofficialProxyAPI({
+      accessToken: props.accessToken,
+      apiReverseProxyUrl: props.API_REVERSE_PROXY || undefined
+    })
+  } else {
+    return new ChatGPTAPI({ ...props })
+  }
+}
 
 export default class MessageController {
   /**
@@ -25,11 +46,23 @@ export default class MessageController {
    * @param ctx
    */
   public static async sendMsgSSE(ctx: Koa.Context) {
-    const { msg, ownerId, parentMessageId, model, apiKey, temperature, top_p } =
-      ctx.request.query as any
+    const {
+      msg,
+      ownerId,
+      parentMessageId,
+      conversationId,
+      model,
+      apiKey,
+      temperature,
+      top_p
+    } = ctx.request.query as any
     if (!chatgptApiMap.get(ownerId)) {
-      const api = new ChatGPTAPI({
+      const api = GenerateChatGPTAPI({
         apiKey: apiKey || process.env.OPENAI_API_KEY,
+        accessToken: process.env.OPENAI_ACCESS_TOKEN,
+        API_REVERSE_PROXY:
+          process.env.API_REVERSE_PROXY ||
+          'https://ai.fakeopen.com/api/conversation',
         completionParams: {
           model: model || 'gpt-3.5-turbo',
           temperature: isNil(temperature) ? 0.8 : +temperature,
@@ -82,6 +115,7 @@ export default class MessageController {
             const data = JSON.stringify({
               text: partialResponse.text,
               id: partialResponse.id,
+              conversationId: partialResponse.conversationId,
               done: false,
               error: false
             })
@@ -89,9 +123,18 @@ export default class MessageController {
             events.emit('data', data)
           },
           timeoutMs: +process.env.CHATGPT_REQUEST_TIMEOUT,
-          ...(parentMessageId
+          ...(process.env.OPENAI_API_KEY && parentMessageId
             ? {
                 parentMessageId
+              }
+            : {}),
+          ...(!process.env.OPENAI_API_KEY &&
+          process.env.OPENAI_ACCESS_TOKEN &&
+          parentMessageId &&
+          conversationId
+            ? {
+                parentMessageId,
+                conversationId
               }
             : {})
         })
@@ -101,6 +144,7 @@ export default class MessageController {
             JSON.stringify({
               text: res.text,
               id: res.id,
+              conversationId: res.conversationId,
               done: true,
               error: false
             })

@@ -6,6 +6,7 @@ declare namespace Answer {
         ownerName: string
         content: string
         id: string
+        conversationId?: string
         error: boolean
       }
     | {

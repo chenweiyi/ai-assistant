@@ -76,6 +76,7 @@ export default function IndexPage() {
    */
   async function getConstantMsg(meta: RequestOption, sessionId: string) {
     const settings = getSettingData() as ILocalSettings
+    const convasition = getConvasitionBySessionId(sessionId)
     const source = new EventSource(
       `/q/sendMsg/sse?${qs.stringify({
         apiKey: settings?.apiKey,
@@ -83,8 +84,8 @@ export default function IndexPage() {
         top_p: settings?.top_p,
         model: settings?.model,
         ownerId,
-        parentMessageId:
-          getConvasitionBySessionId(sessionId)?.parentMessageId || '',
+        parentMessageId: convasition?.parentMessageId || '',
+        conversationId: convasition?.conversationId ?? undefined,
         ...meta
       })}`
     )
@@ -114,6 +115,7 @@ export default function IndexPage() {
             ownerName,
             content: result.text,
             id: result.id,
+            conversationId: result.conversationId,
             error: result.error
           }
           newData.push(newAnswer)
@@ -122,6 +124,7 @@ export default function IndexPage() {
             {
               data: newData,
               parentMessageId: result.error ? '' : result.id,
+              conversationId: result.conversationId ?? undefined,
               isInput: !result.error,
               isLoading: false
             },
@@ -144,6 +147,7 @@ export default function IndexPage() {
                 ownerName,
                 content: result.text,
                 id: result.id,
+                conversationId: result.conversationId,
                 error: result.error
               }
             ]
@@ -152,6 +156,7 @@ export default function IndexPage() {
               {
                 data: newData,
                 parentMessageId: result.error ? '' : result.id,
+                conversationId: result.conversationId ?? undefined,
                 isInput: !result.error,
                 isLoading: false
               },

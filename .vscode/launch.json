@@ -5,6 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "name": "nodemon",
+      "program": "${workspaceFolder}/packages/backend/src/bin/www.mts",
+      "request": "launch",
+      "restart": true,
+      "runtimeExecutable": "${workspaceFolder}/packages/backend/node_modules/.bin/nodemon",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "cwd": "${workspaceFolder}/packages/backend"
+    },
+    {
       "type": "chrome",
       "request": "launch",
       "name": "chrome调试项目",

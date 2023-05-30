@@ -11,7 +11,7 @@ This is an AI project that integrates various open source AI capabilities.
 
 ## Node Version
 
-Node version needs to be >= 18.
+Node version >= 18 is required.
 
 ## Environment Variables
 
@@ -24,25 +24,40 @@ OPENAI_API_KEY=
 # PROXY_ADDRESS represents an http proxy. If left blank or not passed any value,
 # it means that the http proxy is not enabled.
 PROXY_ADDRESS=
+
+# change this to an `accessToken` extracted from the ChatGPT site's
+# `https://chat.openai.com/api/auth/session` response
+OPENAI_ACCESS_TOKEN=
+
+# Reverse Proxy - Available on accessToken
+# Default: https://ai.fakeopen.com/api/conversation
+API_REVERSE_PROXY=
 ```
+
+- `OPENAI_API_KEY`: Indicates that official OpenAI APIs will be used to access chatgpt.
+- `PROXY_ADDRESS`: Scientific Internet access proxy configuration, for example: http://xxx.
+- `OPENAI_ACCESS_TOKEN`: Indicates that unofficial APIs will be used to access chatgpt.
+- `API_REVERSE_PROXY`: Indicates available unofficial reverse proxies. By default it adopts "https://ai.fakeopen.com/api/conversation". For details please refer [here](https://github.com/transitive-bullshit/chatgpt-api/tree/main #reverse-proxy).
+
+> If both `OPENAI_API_KEY` and `OPENAI_ACCESS_TOKEN` are configured, `OPENAI_API_KEY` will be given priority.
 
 ## How to Use?
 
-1. First install dependencies by running `pnpm install` in the root directory using `pnpm`.
-2. Start the project: run `pnpm run dev` in the root directory.
-3. Access project address: `http://localhost:3000`.
+1. First install dependencies, install code using `pnpm` in the root directory.
+2. Start the project: execute `pnpm run dev` in the root directory.
+3. Access the project address: `http://localhost:3000`.
 
 ## How to Develop?
 
-### Method One: One-Click Startup
+### Method 1: One-click Startup
 
-Run `pnpm run dev` in the root directory.
+Execute `pnpm run dev` in the root directory.
 
-### Method Two: Separate Frontend and Backend Startup
+### Method 2: Separate Front-end and Back-end Startup
 
-1. Start frontend:`pnpm run dev:fe`.
-2. Start backend:`pnpm run dev:be`.
-3. Access frontend project address:`http://localhost:8000`.
+1. Start front-end:`pnpm run dev:fe`.
+2. Start back-end:`pnpm run dev:be`.
+3. Access front-end project address:`http://localhost:8000`.
 
 ## TODO
 
