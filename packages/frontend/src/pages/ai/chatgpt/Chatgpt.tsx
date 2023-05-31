@@ -26,7 +26,8 @@ type RequestOption = {
 }
 
 // TODO
-const ownerId = 'chenwy'
+// const ownerId = 'chenwy'
+const ownerId = 'admin'
 const ownerName = 'xiaochen'
 
 export default function IndexPage() {
