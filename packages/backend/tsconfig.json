@@ -1,14 +1,18 @@
 {
+  "ts-node": {
+    "transpileOnly": true,
+    "esm": true
+  },
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext" ,
-    "rootDir": "./src" ,
-    "moduleResolution": "node" ,
-    "outDir": "./build" ,
-    "allowSyntheticDefaultImports": true ,
-    "esModuleInterop": true ,
-    "forceConsistentCasingInFileNames": true ,
-    "strict": false ,
+    "module": "ESNext",
+    "rootDir": "./src",
+    "moduleResolution": "node",
+    "outDir": "./build",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
     "skipLibCheck": true
   },
   "paths": {

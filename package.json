@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter=./packages/** run dev",
-    "build": "pnpm --filter=./packages/** run build",
-    "test": "pnpm --filter=./packages/** run test",
+    "dev": "pnpm --filter \"./packages/*\" run dev",
+    "build": "pnpm --filter \"./packages/*\" run build",
+    "test": "pnpm --filter \"./packages/*\" run test",
     "debug": "npm run debug:be & npm run dev:fe",
     "dev:fe": "pnpm --filter=ai-assistant-frontend run dev",
     "dev:be": "pnpm --filter=ai-assistant-backend run dev",
