@@ -15,7 +15,7 @@ Node version >= 18 is required.
 
 ## Environment Variables
 
-In the `/packages/backend` directory, copy an `.env.example` file and rename it to `.env`, then modify its fields:
+In root directory, copy an `.env.example` file and rename it to `.env`, then modify its fields:
 
 ```
 # OpenAI API Key - https://platform.openai.com/account/api-keys
@@ -32,14 +32,22 @@ OPENAI_ACCESS_TOKEN=
 # Reverse Proxy - Available on accessToken
 # Default: https://ai.fakeopen.com/api/conversation
 API_REVERSE_PROXY=
+
+# Third-party service API address
+CUSTOM_API_URL=
+# Third-party service API may need cookie
+CUSTOM_COOKIE=
+
 ```
 
 - `OPENAI_API_KEY`: Indicates that official OpenAI APIs will be used to access chatgpt.
 - `PROXY_ADDRESS`: Scientific Internet access proxy configuration, for example: http://xxx.
-- `OPENAI_ACCESS_TOKEN`: Indicates that unofficial APIs will be used to access chatgpt.
+- `OPENAI_ACCESS_TOKEN`: OpenAI's [access_token](https://chat.openai.com/api/auth/session), The field usually use with `API_REVERSE_PROXY`，Indicates that unofficial APIs will be used to access chatgpt.
 - `API_REVERSE_PROXY`: Indicates available unofficial reverse proxies. By default it adopts "https://ai.fakeopen.com/api/conversation". For details please refer [transitive-bullshit 大佬](https://github.com/transitive-bullshit/chatgpt-api/tree/main#reverse-proxy).
+- `CUSTOM_API_URL`: Indicates the third party support service url.
+- `CUSTOM_COOKIE`: Indicates the third party may need `cookie` info.
 
-> If both `OPENAI_API_KEY` and `OPENAI_ACCESS_TOKEN` are configured, `OPENAI_API_KEY` will be given priority.
+> Priority: `OPENAI_API_KEY` > `OPENAI_ACCESS_TOKEN` > `CUSTOM_API_URL`。
 
 ## How to Use?
 

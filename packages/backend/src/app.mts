@@ -14,10 +14,13 @@ import message from './routes/message.mjs'
 import users from './routes/users.mjs'
 import conditional from './utils/koa-conditional-get.mjs'
 
-dotenv.config()
+const debug = debugLibrary('app')
+debug('.env:', path.resolve('..', '..', '.env'))
+dotenv.config({
+  path: path.resolve('..', '..', '.env')
+})
 
 let app = new Koa()
-const debug = debugLibrary('app')
 
 // error handler
 onerror(app)

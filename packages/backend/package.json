@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "nodemon ./src/bin/www.mts",
-    "debug": "cross-env DEBUG=\"custom,message\" nodemon ./src/bin/www.mts",
+    "debug": "cross-env DEBUG=\"custom,message,app\" nodemon ./src/bin/www.mts",
     "prd": "pm2 start ./build/bin/www.mjs",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf ./build",
