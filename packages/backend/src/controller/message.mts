@@ -18,9 +18,12 @@ import { isNil } from 'lodash-es'
 import fetch from 'node-fetch'
 import { PassThrough } from 'stream'
 
-interface GenerateChatGPTAPIProps extends ChatGPTAPIOptions {
-  accessToken: string | undefined
-  API_REVERSE_PROXY: string | undefined
+import CustomChatGPTAPI from '../utils/custom.mjs'
+
+export interface CustomChatMessage {
+  id: string
+  text: string
+  conversationId: string
 }
 
 const debug = debugLibrary('message')
@@ -29,15 +32,62 @@ const chatgptApiMap = new Map<string, ChatGPTAPI | ChatGPTUnofficialProxyAPI>()
 const events = new EventEmitter()
 events.setMaxListeners(0)
 
-function GenerateChatGPTAPI(props: GenerateChatGPTAPIProps) {
-  if (props.accessToken) {
-    return new ChatGPTUnofficialProxyAPI({
-      accessToken: props.accessToken,
-      apiReverseProxyUrl: props.API_REVERSE_PROXY || undefined
-    })
-  } else {
+function GenerateChatGPTAPI(props: ChatGPTAPIOptions) {
+  if (props.apiKey) {
     return new ChatGPTAPI({ ...props })
+  } else if (process.env.OPENAI_ACCESS_TOKEN) {
+    return new ChatGPTUnofficialProxyAPI({
+      accessToken: process.env.OPENAI_ACCESS_TOKEN,
+      apiReverseProxyUrl:
+        process.env.API_REVERSE_PROXY ||
+        'https://ai.fakeopen.com/api/conversation'
+    })
+  } else if (process.env.CUSTOM_API_URL) {
+    return new CustomChatGPTAPI({
+      url: process.env.CUSTOM_API_URL,
+      cookie: process.env.CUSTOM_COOKIE,
+      ...props
+    })
   }
+  throw new Error(
+    'At least one of the fields in process.env needs to be OPENAI_ACCESS_TOKEN, OPENAI_ACCESS_TOKEN, CUSTOM_API_URL '
+  )
+}
+
+const getRestOptions = ({
+  parentMessageId,
+  conversationId
+}: {
+  parentMessageId: string
+  conversationId: string
+}) => {
+  if (process.env.OPENAI_API_KEY && parentMessageId) {
+    // OPENAI_API_KEY存在时，不需要conversationId
+    return {
+      parentMessageId
+    }
+  } else if (
+    !process.env.OPENAI_API_KEY &&
+    process.env.OPENAI_ACCESS_TOKEN &&
+    parentMessageId &&
+    conversationId
+  ) {
+    // OPENAI_ACCESS_TOKEN存在时，需要conversationId
+    return {
+      parentMessageId,
+      conversationId
+    }
+  } else if (
+    // CUSTOM_API_URL存在时，需要parentMessageId
+    !process.env.OPENAI_API_KEY &&
+    !process.env.OPENAI_ACCESS_TOKEN &&
+    process.env.CUSTOM_API_URL
+  ) {
+    return {
+      parentMessageId
+    }
+  }
+  return {}
 }
 
 export default class MessageController {
@@ -59,10 +109,6 @@ export default class MessageController {
     if (!chatgptApiMap.get(ownerId)) {
       const api = GenerateChatGPTAPI({
         apiKey: apiKey || process.env.OPENAI_API_KEY,
-        accessToken: process.env.OPENAI_ACCESS_TOKEN,
-        API_REVERSE_PROXY:
-          process.env.API_REVERSE_PROXY ||
-          'https://ai.fakeopen.com/api/conversation',
         completionParams: {
           model: model || 'gpt-3.5-turbo',
           temperature: isNil(temperature) ? 0.8 : +temperature,
@@ -111,7 +157,7 @@ export default class MessageController {
 
       api
         .sendMessage(msg, {
-          onProgress: (partialResponse: ChatMessage) => {
+          onProgress: (partialResponse: ChatMessage | CustomChatMessage) => {
             const data = JSON.stringify({
               text: partialResponse.text,
               id: partialResponse.id,
@@ -123,20 +169,10 @@ export default class MessageController {
             events.emit('data', data)
           },
           timeoutMs: +process.env.CHATGPT_REQUEST_TIMEOUT,
-          ...(process.env.OPENAI_API_KEY && parentMessageId
-            ? {
-                parentMessageId
-              }
-            : {}),
-          ...(!process.env.OPENAI_API_KEY &&
-          process.env.OPENAI_ACCESS_TOKEN &&
-          parentMessageId &&
-          conversationId
-            ? {
-                parentMessageId,
-                conversationId
-              }
-            : {})
+          ...getRestOptions({
+            parentMessageId,
+            conversationId
+          })
         })
         .then((res) => {
           events.emit(
