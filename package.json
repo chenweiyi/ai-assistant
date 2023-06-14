@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter=./packages/** run dev",
-    "build": "pnpm --filter=./packages/** run build",
-    "test": "pnpm --filter=./packages/** run test",
+    "dev": "pnpm --filter \"./packages/*\" run dev",
+    "build": "pnpm --filter \"./packages/*\" run build",
+    "test": "pnpm --filter \"./packages/*\" run test",
     "debug": "npm run debug:be & npm run dev:fe",
     "dev:fe": "pnpm --filter=ai-assistant-frontend run dev",
     "dev:be": "pnpm --filter=ai-assistant-backend run dev",
@@ -15,7 +15,9 @@
     "preinstall": "npx only-allow pnpm",
     "pre-commit": "lint-staged",
     "prettier:check": "prettier '**/*.{ts,tsx,mts,mjs,less,js}' --check",
-    "prettier:write": "prettier '**/*.{ts,tsx,mts,mjs,less,js}' --write"
+    "prettier:write": "prettier '**/*.{ts,tsx,mts,mjs,less,js}' --write",
+    "rm:lib": "rm -rf ./node_modules && rm -rf ./packages/frontend/node_modules && rm -rf ./packages/backend/node_modules",
+    "pkg": "node scripts/pkg.cjs"
   },
   "dependencies": {
     "dayjs": "^1.11.7",

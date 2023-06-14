@@ -6,7 +6,7 @@
   "ignore": ["./src/@types", "node_modules"],
   "execMap": {
     "ts": "ts-node",
-    "mts": "ts-node --esm -T"
+    "mts": "npx ts-node"
   },
   "ext": "mts"
 }
