@@ -193,15 +193,15 @@ export default function IndexPage() {
   }
 
   // 点击“发送”按钮发送消息事件
-  function sendMsg(sessionId: string) {
-    if (lastInputValue.current) {
+  function sendMsg(sessionId: string, msg?: string) {
+    if (lastInputValue.current || msg) {
       // 存入数据及loading数据
       const datas = [
         {
           type: 'question' as 'question',
           ownerId,
           ownerName,
-          content: lastInputValue.current,
+          content: msg || lastInputValue.current,
           id: Date.now() + ''
         },
         {
@@ -213,9 +213,9 @@ export default function IndexPage() {
       // 存储问题及loading
       setResultDataBySessionId({ append: datas, isLoading: true }, sessionId)
       // 发送请求获取chatgpt的回复
-      getConstantMsg({ msg: lastInputValue.current }, sessionId)
+      getConstantMsg({ msg: msg || lastInputValue.current }, sessionId)
       // 最后一条问题
-      setLatestQuestion(lastInputValue.current)
+      setLatestQuestion(msg || lastInputValue.current)
     }
     if (sessionId === active?.sessionId) {
       // 清空输入框
@@ -274,7 +274,7 @@ export default function IndexPage() {
         }, 10)
         setInputValue(str)
       }
-      flow(value.slice(0, 1), value)
+      flow(value.slice(0, 2), value)
     })
   }
 
@@ -285,8 +285,9 @@ export default function IndexPage() {
   async function choosePromptHandler(prompt: string) {
     focusInput()
     setDrawer(false)
-    await setFlowValue(prompt)
-    sendMsg(active?.sessionId as string)
+    // await setFlowValue(prompt)
+    setInputValue(prompt)
+    sendMsg(active?.sessionId as string, prompt)
   }
 
   function handleKeyDown(e: any) {
@@ -296,8 +297,9 @@ export default function IndexPage() {
   }
 
   async function reAnswer() {
-    await setFlowValue(latestQuestion)
-    sendMsg(active?.sessionId as string)
+    // await setFlowValue(latestQuestion)
+    setInputValue(latestQuestion)
+    sendMsg(active?.sessionId as string, latestQuestion)
   }
 
   function addEvent() {
