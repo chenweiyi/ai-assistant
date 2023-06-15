@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv'
 import debugLibrary from 'debug'
 import Koa from 'koa'
+import cors from 'koa2-cors'
 import history from 'koa2-history-api-fallback'
 import bodyparser from 'koa-bodyparser'
 import etag from 'koa-etag'
@@ -22,6 +23,12 @@ dotenv.config({
 
 let app = new Koa()
 
+app.use(
+  cors({
+    origin: '*',
+    allowHeaders: ['*']
+  })
+)
 // error handler
 onerror(app)
 

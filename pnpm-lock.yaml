@@ -1,8 +1,4 @@
-lockfileVersion: '6.1'
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
+lockfileVersion: '6.0'
 
 importers:
 
@@ -74,7 +70,7 @@ importers:
         version: registry.npmmirror.com/abortcontroller-polyfill@1.7.5
       axios:
         specifier: ^1.4.0
-        version: registry.npmmirror.com/axios@1.4.0(debug@4.1.1)
+        version: registry.npmmirror.com/axios@1.4.0(debug@4.3.4)
       chatgpt:
         specifier: ^5.2.2
         version: registry.npmmirror.com/chatgpt@5.2.5
@@ -117,6 +113,9 @@ importers:
       koa-views:
         specifier: ^6.2.0
         version: registry.npmmirror.com/koa-views@6.3.1(pug@2.0.4)
+      koa2-cors:
+        specifier: ^2.0.6
+        version: registry.npmmirror.com/koa2-cors@2.0.6
       koa2-history-api-fallback:
         specifier: ^0.1.0
         version: registry.npmmirror.com/koa2-history-api-fallback@0.1.0
@@ -126,6 +125,9 @@ importers:
       node-fetch:
         specifier: ^3.3.0
         version: registry.npmmirror.com/node-fetch@3.3.1
+      openai:
+        specifier: ^3.3.0
+        version: registry.npmmirror.com/openai@3.3.0(debug@4.3.4)
       openai-authenticator:
         specifier: ^0.0.3
         version: registry.npmmirror.com/openai-authenticator@0.0.3
@@ -1456,7 +1458,7 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
-      '@babel/types': registry.npmmirror.com/@babel/types@7.17.0
+      '@babel/types': registry.npmmirror.com/@babel/types@7.22.5
 
   registry.npmmirror.com/@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@7.22.5(@babel/core@7.22.5):
     resolution: {integrity: sha512-NP1M5Rf+u2Gw9qfSO4ihjcTGW5zXTi36ITLd4/EoAcEhIZ0yjMqmftDNl3QC19CX7olhrjpyU454g/2W7X0jvQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression/-/plugin-bugfix-safari-id-destructuring-collision-in-function-expression-7.22.5.tgz}
@@ -2867,6 +2869,7 @@ packages:
     dependencies:
       '@babel/helper-validator-identifier': registry.npmmirror.com/@babel/helper-validator-identifier@7.22.5
       to-fast-properties: registry.npmmirror.com/to-fast-properties@2.0.0
+    dev: true
 
   registry.npmmirror.com/@babel/types@7.22.5:
     resolution: {integrity: sha512-zo3MIHGOkPOfoRXitsgHLjEXmlDaD/5KU1Uzuc9GNiZPhSqVxVRtxuPaSBZDsYZ9qV88AjtMtWW7ww98loJ9KA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@babel/types/-/types-7.22.5.tgz}
@@ -6997,6 +7000,17 @@ packages:
     version: 1.0.5
     engines: {node: '>= 0.4'}
 
+  registry.npmmirror.com/axios@0.26.1(debug@4.3.4):
+    resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/axios/-/axios-0.26.1.tgz}
+    id: registry.npmmirror.com/axios/0.26.1
+    name: axios
+    version: 0.26.1
+    dependencies:
+      follow-redirects: registry.npmmirror.com/follow-redirects@1.15.2(debug@4.3.4)
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
   registry.npmmirror.com/axios@0.27.2(debug@4.3.4):
     resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/axios/-/axios-0.27.2.tgz}
     id: registry.npmmirror.com/axios/0.27.2
@@ -7009,13 +7023,13 @@ packages:
       - debug
     dev: false
 
-  registry.npmmirror.com/axios@1.4.0(debug@4.1.1):
+  registry.npmmirror.com/axios@1.4.0(debug@4.3.4):
     resolution: {integrity: sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/axios/-/axios-1.4.0.tgz}
     id: registry.npmmirror.com/axios/1.4.0
     name: axios
     version: 1.4.0
     dependencies:
-      follow-redirects: registry.npmmirror.com/follow-redirects@1.15.2(debug@4.1.1)
+      follow-redirects: registry.npmmirror.com/follow-redirects@1.15.2(debug@4.3.4)
       form-data: registry.npmmirror.com/form-data@4.0.0
       proxy-from-env: registry.npmmirror.com/proxy-from-env@1.1.0
     transitivePeerDependencies:
@@ -10467,21 +10481,6 @@ packages:
     deprecated: flatten is deprecated in favor of utility frameworks such as lodash.
     dev: false
 
-  registry.npmmirror.com/follow-redirects@1.15.2(debug@4.1.1):
-    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/follow-redirects/-/follow-redirects-1.15.2.tgz}
-    id: registry.npmmirror.com/follow-redirects/1.15.2
-    name: follow-redirects
-    version: 1.15.2
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dependencies:
-      debug: registry.npmmirror.com/debug@4.1.1
-    dev: false
-
   registry.npmmirror.com/follow-redirects@1.15.2(debug@4.3.4):
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/follow-redirects/-/follow-redirects-1.15.2.tgz}
     id: registry.npmmirror.com/follow-redirects/1.15.2
@@ -11343,7 +11342,7 @@ packages:
     name: history
     version: 5.3.0
     dependencies:
-      '@babel/runtime': registry.npmmirror.com/@babel/runtime@7.21.0
+      '@babel/runtime': registry.npmmirror.com/@babel/runtime@7.22.5
     dev: false
 
   registry.npmmirror.com/hmac-drbg@1.0.1:
@@ -13073,6 +13072,13 @@ packages:
       - velocityjs
       - walrus
       - whiskers
+    dev: false
+
+  registry.npmmirror.com/koa2-cors@2.0.6:
+    resolution: {integrity: sha512-JRCcSM4lamM+8kvKGDKlesYk2ASrmSTczDtGUnIadqMgnHU4Ct5Gw7Bxt3w3m6d6dy3WN0PU4oMP43HbddDEWg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/koa2-cors/-/koa2-cors-2.0.6.tgz}
+    name: koa2-cors
+    version: 2.0.6
+    engines: {node: '>= 7.6.0'}
     dev: false
 
   registry.npmmirror.com/koa2-history-api-fallback@0.1.0:
@@ -15042,6 +15048,18 @@ packages:
     version: 0.0.3
     dependencies:
       fetch-cookie: registry.npmmirror.com/fetch-cookie@2.1.0
+    dev: false
+
+  registry.npmmirror.com/openai@3.3.0(debug@4.3.4):
+    resolution: {integrity: sha512-uqxI/Au+aPRnsaQRe8CojU0eCR7I0mBiKjD3sNMzY6DaC1ZVrc85u98mtJW6voDug8fgGN+DIZmTDxTthxb7dQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/openai/-/openai-3.3.0.tgz}
+    id: registry.npmmirror.com/openai/3.3.0
+    name: openai
+    version: 3.3.0
+    dependencies:
+      axios: registry.npmmirror.com/axios@0.26.1(debug@4.3.4)
+      form-data: registry.npmmirror.com/form-data@4.0.0
+    transitivePeerDependencies:
+      - debug
     dev: false
 
   registry.npmmirror.com/optionator@0.9.1:
@@ -21799,3 +21817,7 @@ packages:
     name: zwitch
     version: 2.0.4
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

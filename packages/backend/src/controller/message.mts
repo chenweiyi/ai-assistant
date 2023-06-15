@@ -4,6 +4,8 @@
  * @Last Modified by: chenweiyi
  * @Last Modified time: 2023-02-21 15:54:08
  */
+import axios from 'axios'
+import type { ResponseType } from 'axios'
 import {
   ChatGPTAPI,
   ChatGPTAPIOptions,
@@ -16,9 +18,19 @@ import proxy from 'https-proxy-agent'
 import Koa from 'koa'
 import { isNil } from 'lodash-es'
 import fetch from 'node-fetch'
+import type { CreateChatCompletionRequest } from 'openai'
 import { PassThrough } from 'stream'
 
 import CustomChatGPTAPI from '../utils/custom.mjs'
+
+type chatResponse = {
+  id: string
+  text: string
+} & {
+  data?: null
+  message?: string
+  status?: string
+}
 
 export interface CustomChatMessage {
   id: string
@@ -26,8 +38,17 @@ export interface CustomChatMessage {
   conversationId: string
 }
 
+interface IRes {
+  id: string
+  text: string
+  conversationId: string
+}
+
 const debug = debugLibrary('message')
-const chatgptApiMap = new Map<string, ChatGPTAPI | ChatGPTUnofficialProxyAPI>()
+const chatgptApiMap = new Map<
+  string,
+  ChatGPTAPI | ChatGPTUnofficialProxyAPI | CustomChatGPTAPI
+>()
 
 const events = new EventEmitter()
 events.setMaxListeners(0)
@@ -45,8 +66,7 @@ function GenerateChatGPTAPI(props: ChatGPTAPIOptions) {
   } else if (process.env.CUSTOM_API_URL) {
     return new CustomChatGPTAPI({
       url: process.env.CUSTOM_API_URL,
-      cookie: process.env.CUSTOM_COOKIE,
-      ...props
+      cookie: process.env.CUSTOM_COOKIE
     })
   }
   throw new Error(
@@ -90,6 +110,15 @@ const getRestOptions = ({
   return {}
 }
 
+const transformContent = (
+  messages: CreateChatCompletionRequest['messages']
+) => {
+  const contents = messages
+    .filter((item) => item.role === 'user')
+    .map((item) => item.content)
+  return contents.join(contents.length > 1 ? ',content is:' : '')
+}
+
 export default class MessageController {
   /**
    * 获取chatgpt的消息的sse
@@ -106,6 +135,7 @@ export default class MessageController {
       temperature,
       top_p
     } = ctx.request.query as any
+    debug('sendMsgSSE params', ctx.request.query, ctx.request.body)
     if (!chatgptApiMap.get(ownerId)) {
       const api = GenerateChatGPTAPI({
         apiKey: apiKey || process.env.OPENAI_API_KEY,
@@ -214,5 +244,183 @@ export default class MessageController {
       )
       stream.end()
     }
+  }
+
+  /**
+   * 模拟 chatgpt 官方 /v1/completions 接口
+   * @param ctx
+   */
+  public static async completions(ctx: Koa.Context) {
+    const params = ctx.request.body as CreateChatCompletionRequest
+    debug('entrypoint params', ctx.request.body)
+
+    const res: IRes = {
+      id: '',
+      text: '',
+      conversationId: ''
+    }
+
+    const stream = new PassThrough()
+    const listener = (str) => {
+      stream.write(`data: ${str}\n\n`)
+    }
+    events.on('data', listener)
+    stream.on('close', () => {
+      debug('trigger on close')
+      events.off('data', listener)
+    })
+
+    ctx.req.socket.setTimeout(0)
+    ctx.req.socket.setNoDelay(true)
+    ctx.req.socket.setKeepAlive(true)
+    ctx.set({
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache, no-transform',
+      Connection: 'keep-alive'
+    })
+
+    ctx.status = 200
+    ctx.body = stream
+
+    const requestData = {
+      url: process.env.CUSTOM_API_URL,
+      method: 'POST',
+      headers: {
+        cookie: process.env.CUSTOM_COOKIE,
+        'content-type': 'application/json',
+        proxy: false
+      },
+      data: {
+        prompt: transformContent(params.messages),
+        systemMessage: params.messages.find((item) => item.role === 'system')
+          ?.content,
+        options: {
+          operator: 'openai'
+        }
+      },
+      responseType: 'stream' as ResponseType
+    }
+
+    const response = await axios(requestData)
+
+    debug('requst params', requestData)
+
+    const stream_response = response.data
+    stream_response.on('data', (buffer: Buffer) => {
+      const responseText = buffer.toString()
+      debug('on data...', responseText)
+
+      const lines = responseText.split('\n')
+
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].length <= 0) {
+          continue
+        }
+        // logger.log({responseText: lines[i]});
+        const data = JSON.parse(lines[i]) as chatResponse
+
+        if (data.status && data.status === 'Fail') {
+          res.text = data.message || ''
+        } else {
+          if (data.id && data.id.length >= 0) {
+            res.id = data.id
+          }
+          res.text = data.text || ''
+        }
+
+        // params.onProgress(res)
+        events.emit(
+          'data',
+          JSON.stringify({
+            id: res.id,
+            object: 'chat.completion',
+            created: Number(String(new Date().getTime()).slice(0, -3)),
+            choices: [
+              {
+                index: 0,
+                message: {
+                  role: '',
+                  content: res.text || ''
+                },
+                delta: {
+                  role: '',
+                  content: res.text || ''
+                },
+                finish_reason: ''
+              }
+            ],
+            usage: {
+              prompt_tokens: 9,
+              completion_tokens: 12,
+              total_tokens: 21
+            }
+          })
+        )
+      }
+    })
+
+    stream_response.on('end', () => {
+      debug('on end...')
+      events.emit(
+        'data',
+        JSON.stringify({
+          id: res.id,
+          object: 'chat.completion',
+          created: Number(String(new Date().getTime()).slice(0, -3)),
+          choices: [
+            {
+              index: 0,
+              message: {
+                role: '',
+                content: res.text || ''
+              },
+              delta: {
+                role: '',
+                content: res.text || ''
+              },
+              finish_reason: 'stop'
+            }
+          ],
+          usage: {
+            prompt_tokens: 9,
+            completion_tokens: 12,
+            total_tokens: 21
+          }
+        })
+      )
+      stream.end()
+    })
+
+    stream_response.on('error', (e) => {
+      debug('on error...')
+      events.emit(
+        'data',
+        JSON.stringify({
+          id: res.id,
+          object: 'chat.completion',
+          created: Number(String(new Date().getTime()).slice(0, -3)),
+          choices: [
+            {
+              index: 0,
+              message: {
+                role: '',
+                content: res.text || ''
+              },
+              delta: {
+                role: '',
+                content: res.text || ''
+              },
+              finish_reason: 'stop'
+            }
+          ],
+          usage: {
+            prompt_tokens: 9,
+            completion_tokens: 12,
+            total_tokens: 21
+          }
+        })
+      )
+      stream.end()
+    })
   }
 }
