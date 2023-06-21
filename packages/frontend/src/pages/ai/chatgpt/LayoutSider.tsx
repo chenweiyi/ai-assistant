@@ -2,7 +2,7 @@ import { SettingOutlined, UserOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import clsx from 'clsx'
 import { findLast } from 'lodash-es'
-import { SyntheticEvent, useContext, useEffect, useState } from 'react'
+import { SyntheticEvent } from 'react'
 
 import { ChatContext } from './LayoutIndex'
 import AccountModal from './components/AccountModal'

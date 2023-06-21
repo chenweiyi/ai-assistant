@@ -6,9 +6,17 @@
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.stylelint": true
+  "[less]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.stylelint": true
+    }
   },
+  "[css]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.stylelint": true
+    }
+  },
+  "stylelint.validate": ["css", "scss", "sass", "less", "stylus"],
   "unocss.root": "packages/frontend",
   "stylelint.packageManager": "pnpm"
 }

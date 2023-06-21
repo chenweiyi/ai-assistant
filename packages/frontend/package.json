@@ -54,6 +54,7 @@
     "prettier-plugin-packagejson": "^2",
     "stylelint": "^15.6.0",
     "stylus": "^0.59.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "unplugin-auto-import": "^0.16.4"
   }
 }

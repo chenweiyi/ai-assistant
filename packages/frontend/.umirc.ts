@@ -1,5 +1,7 @@
 import { defineConfig } from '@umijs/max'
 
+import { autoImportPlugin } from './auto-import'
+
 const serviceUrl = process.env.CUSTOM_PROXY_URL
 
 // console.log('serviceUrl', serviceUrl)
@@ -26,6 +28,8 @@ export default defineConfig({
   chainWebpack(memo, args) {
     // console.log('memo', memo)
     memo.optimization.minimize(false)
+    memo.plugin('unplugin-auto-import').use(autoImportPlugin())
+    return memo
   },
   routes: [
     { path: '/', redirect: '/ai/chatgpt' },
