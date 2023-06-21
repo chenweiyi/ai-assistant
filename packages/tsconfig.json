@@ -1,0 +1,30 @@
+{
+  "ts-node": {
+    "transpileOnly": true,
+    "esm": true
+  },
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "rootDir": "./src",
+    "moduleResolution": "node",
+    "outDir": "./build",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "paths": {
+    "@/*": ["./src/*"]
+  },
+  "include": ["./src/**/*"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "tsconfig.json",
+    "front",
+    "./src/copyStatic.mjs"
+  ]
+}

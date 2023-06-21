@@ -17,9 +17,10 @@
     "prettier:check": "prettier '**/*.{ts,tsx,mts,mjs,less,js}' --check",
     "prettier:write": "prettier '**/*.{ts,tsx,mts,mjs,less,js}' --write",
     "rm:lib": "rm -rf ./node_modules && rm -rf ./packages/frontend/node_modules && rm -rf ./packages/backend/node_modules",
-    "pkg": "node scripts/pkg.cjs"
+    "pkg": "ts-node scripts/pkg.ts"
   },
   "dependencies": {
+    "chalk": "^5.2.0",
     "dayjs": "^1.11.7",
     "lodash-es": "^4.17.21"
   },
@@ -30,9 +31,11 @@
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.7",
+    "@types/node": "^18.14.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
     "prettier": "^2.8.7",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.0"
   },
   "keywords": [

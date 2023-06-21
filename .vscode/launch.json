@@ -10,7 +10,8 @@
       "runtimeArgs": ["run-script", "pkg"],
       "runtimeExecutable": "npm",
       "skipFiles": ["<node_internals>/**"],
-      "type": "node"
+      "type": "node",
+      "console": "integratedTerminal"
     },
     {
       "console": "integratedTerminal",
