@@ -80,8 +80,8 @@ function LayoutIndex() {
     initialData()
   }, [])
 
-  function initialData() {
-    const res = getConvasitionData() as IConvasition[]
+  async function initialData() {
+    const res = (await getConvasitionData()) as IConvasition[]
     if (res) {
       const data: IConvasition[] = res
       data.forEach((item) => {
@@ -222,6 +222,10 @@ function LayoutIndex() {
   function getActiveResult() {
     return latestResultRef.current.find((r) => r.active)
   }
+
+  useEffect(() => {
+    setConvasitionData([...latestResultRef.current])
+  }, [latestResultRef.current.length])
 
   return (
     <>

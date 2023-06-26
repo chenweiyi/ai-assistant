@@ -4,6 +4,8 @@ import {
   WEEK_REPORT_CHATGPT_KEY
 } from '@/constants/constant'
 
+import { convasitionDB } from './indexdb'
+
 export type ILocalSettings = {
   apiKey: string
   model: string
@@ -33,19 +35,48 @@ export function setSettingData(values: ILocalSettings | string) {
   )
 }
 
-export function getConvasitionData(returnType: 'array' | 'string' = 'array') {
-  const data = localStorage.getItem(CONVASITION_CHATGPT_KEY)
-  if (data) {
-    return returnType === 'array' ? (JSON.parse(data) as IConvasition[]) : data
+export async function getConvasitionData(
+  returnType: 'array' | 'string' = 'array'
+) {
+  let data
+
+  if (window.indexedDB) {
+    try {
+      data = await convasitionDB.getData()
+    } catch (e) {
+      console.error(e)
+    }
+  } else {
+    data = localStorage.getItem(CONVASITION_CHATGPT_KEY)
   }
+
+  if (data) {
+    return returnType === 'array'
+      ? typeof data === 'object'
+        ? data
+        : (JSON.parse(data as string) as IConvasition[])
+      : typeof data === 'object'
+      ? JSON.stringify(data)
+      : data
+  }
+
   return null
 }
 
-export function setConvasitionData(values: IConvasition[] | string) {
-  localStorage.setItem(
-    CONVASITION_CHATGPT_KEY,
-    typeof values === 'object' ? JSON.stringify(values) : values
-  )
+export async function setConvasitionData(values: IConvasition[] | string) {
+  if (window.indexedDB) {
+    try {
+      const val = typeof values === 'string' ? JSON.parse(values) : values
+      await convasitionDB!.setData(val)
+    } catch (e) {
+      console.error(e)
+    }
+  } else {
+    localStorage.setItem(
+      CONVASITION_CHATGPT_KEY,
+      typeof values === 'object' ? JSON.stringify(values) : values
+    )
+  }
 }
 
 export function getWeekReportData(returnType: 'object' | 'string' = 'object') {
