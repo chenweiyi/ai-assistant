@@ -26,8 +26,11 @@ function SearchInput(props: SearchInputProps, ref: React.Ref<RefSelectProps>) {
 
   const [inputValue, setInputValue] = useState<string>('')
 
-  const fetch = (value: string, callback: (arr: Array<IData>) => void) => {
-    const sessionData = getConvasitionData() as IConvasition[]
+  const fetch = async (
+    value: string,
+    callback: (arr: Array<IData>) => void
+  ) => {
+    const sessionData = (await getConvasitionData()) as IConvasition[]
     if (sessionData) {
       const data: IConvasition[] = sessionData
       const list: Array<IData> = []

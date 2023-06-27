@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 importers:
 
@@ -21949,7 +21953,3 @@ packages:
     name: zwitch
     version: 2.0.4
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
