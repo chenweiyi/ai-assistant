@@ -8,8 +8,7 @@
 
 ![截图](Screenshots/jietu2.png)
 
-1. 目前仅仅接入了 chatgpt api，后面打算接入其他 ai，比如国产 ai。
-2. 前端使用 umijs, react, ts; 后端使用 koa，ts，后端也是用 ES module 方式去写
+让每个人都拥有可以使用 AI 的能力。
 
 ## node 版本
 

@@ -8,8 +8,7 @@ This is an AI project that integrates various open source AI capabilities.
 
 ![Screenshot](Screenshots/jietu2.png)
 
-1. Currently, only the chatgpt API is integrated, and other AIs such as domestic AIs are planned to be integrated later.
-2. The front-end uses umijs, react, ts; the back-end uses koa, ts, and also uses ES module to write.
+Let everyone have the ability to use AI.
 
 ## Node Version
 
