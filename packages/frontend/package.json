@@ -5,7 +5,7 @@
     "name": "chenweiyi",
     "email": "737649321@qq.com"
   },
-  "version": "1.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "max dev",
     "build": "max build",
@@ -41,6 +41,7 @@
     "remark-slug": "^7.0.1",
     "remark-toc": "^8.0.1",
     "unocss": "^0.51.12",
+    "unplugin-auto-import": "^0.16.4",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
@@ -54,7 +55,6 @@
     "prettier-plugin-packagejson": "^2",
     "stylelint": "^15.6.0",
     "stylus": "^0.59.0",
-    "typescript": "^5.0.0",
-    "unplugin-auto-import": "^0.16.4"
+    "typescript": "^5.0.0"
   }
 }

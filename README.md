@@ -1,3 +1,5 @@
+[中文文档](./README_zh.md)
+
 # An AI Assistant
 
 This is an AI project that integrates various open source AI capabilities.
@@ -51,9 +53,30 @@ CUSTOM_COOKIE=
 
 ## How to Use?
 
+### Local development
+
 1. First install dependencies, install code using `pnpm` in the root directory.
 2. Start the project: execute `pnpm run dev` in the root directory.
 3. Access the project address: `http://localhost:3000`.
+
+### Get from Docker
+
+#### Get Image
+
+```
+docker image pull cwy829/ai-assistant:0.0.1
+```
+
+#### Start Container
+
+> In the command below, `~/docker-data/.env` needs to be replaced with the address where your `.env` file is located.
+> For more information on `.env`, please refer to [here](#environment-variables).
+
+```
+docker run -d -p 3000:3000 -v ~/docker-data/.env:/ai-assistant/.env --name ai-assistant cwy829/ai-assistant:0.0.1
+```
+
+For more information about Docker, please refer to the [documentation](./DOCKERHELP.md).
 
 ## How to Develop?
 

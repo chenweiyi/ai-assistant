@@ -21,6 +21,8 @@ dotenv.config({
   path: path.resolve('..', '..', '.env')
 })
 
+const frontPath = path.resolve('..', 'frontend/dist')
+
 let app = new Koa()
 
 app.use(
@@ -65,7 +67,7 @@ app.use(async (ctx, next) => {
 })
 
 app.use(
-  serve('frontend/dist/', {
+  serve(frontPath, {
     // 设置cache-controll缓存时间
     maxage: 1000 * 60 * 60 * 2,
     // index.html禁止缓存

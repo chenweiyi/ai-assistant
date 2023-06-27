@@ -1,0 +1,18 @@
+.git
+# .husky
+.vscode
+node_modules
+**/node_modules/
+dist
+**/dist/
+build
+**/build/
+.umi
+**/.umi/
+.umi-production
+**/.umi-production/
+npm-debug.log
+gptcommit.toml
+Dockerfile
+.env
+
