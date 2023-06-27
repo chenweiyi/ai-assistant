@@ -63,7 +63,7 @@ CUSTOM_COOKIE=
 #### 获取 Image
 
 ```
-docker image pull cwy829/ai-assistant:0.0.1
+docker image pull cwy829/ai-assistant
 ```
 
 #### 启动 Container
@@ -72,7 +72,7 @@ docker image pull cwy829/ai-assistant:0.0.1
 > 更多关于 .env 的信息参考[这里](#环境变量)
 
 ```
-docker run -d -p 3000:3000 -v ~/docker-data/.env:/ai-assistant/.env --name ai-assistant cwy829/ai-assistant:0.0.1
+docker run -d -p 3000:3000 -v ~/docker-data/.env:/ai-assistant/.env --name ai-assistant cwy829/ai-assistant
 ```
 
 更多关于 docker 的知识，请查看 [文档](./DOCKERHELP_zh.md)

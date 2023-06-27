@@ -64,7 +64,7 @@ CUSTOM_COOKIE=
 #### Get Image
 
 ```
-docker image pull cwy829/ai-assistant:0.0.1
+docker image pull cwy829/ai-assistant
 ```
 
 #### Start Container
@@ -73,7 +73,7 @@ docker image pull cwy829/ai-assistant:0.0.1
 > For more information on `.env`, please refer to [here](#environment-variables).
 
 ```
-docker run -d -p 3000:3000 -v ~/docker-data/.env:/ai-assistant/.env --name ai-assistant cwy829/ai-assistant:0.0.1
+docker run -d -p 3000:3000 -v ~/docker-data/.env:/ai-assistant/.env --name ai-assistant cwy829/ai-assistant
 ```
 
 For more information about Docker, please refer to the [documentation](./DOCKERHELP.md).
