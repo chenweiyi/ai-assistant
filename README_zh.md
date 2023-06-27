@@ -50,13 +50,14 @@ CUSTOM_COOKIE=
 
 > 优先级：`OPENAI_API_KEY` > `OPENAI_ACCESS_TOKEN` > `CUSTOM_API_URL`。
 
-## 如何使用？
+## 如何开发？
 
 ### 本地开发
 
-1. 首先安装依赖，`根目录`下安装依赖，使用`pnpm`安装代码。
-2. 启动项目：根目录下执行`pnpm run dev`。
-3. 访问项目地址：`http://localhost:3000`
+1. 本地新增 [.env](#环境变量) 文件，配置相应参数。
+1. 首先安装依赖，`根目录`下安装依赖，使用 `pnpm i` 安装代码。
+1. 启动项目：根目录下执行`npm run dev`。
+1. 访问项目地址：`http://localhost:3000`
 
 ### 从 docker 获取
 
@@ -77,23 +78,14 @@ docker run -d -p 3000:3000 -v ~/docker-data/.env:/ai-assistant/.env --name ai-as
 
 更多关于 docker 的知识，请查看 [文档](./DOCKERHELP_zh.md)
 
-## 如何开发？
+## 如何使用？
 
 ### 方式一：一键启动
 
-在根目录下执行 `pnpm run dev`
+在根目录下执行 `npm start`
 
 ### 方式二：分前后端启动
 
-1. 启动前端：`pnpm run dev:fe`
-2. 启动后端：`pnpm run dev:be`
+1. 启动前端：`npm run dev:fe`
+2. 启动后端：`npm run dev:be`
 3. 访问前端项目地址：`http://localhost:8000`
-
-## TODO
-
-- [x] stream 输出
-- [x] ~~获取账户信息~~
-- [x] 支持切换到 gpt-4
-- [x] monorepo 探索
-- [ ] chrome 扩展
-- [ ] i18n

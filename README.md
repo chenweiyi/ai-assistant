@@ -51,13 +51,14 @@ CUSTOM_COOKIE=
 
 > Priority: `OPENAI_API_KEY` > `OPENAI_ACCESS_TOKEN` > `CUSTOM_API_URL`。
 
-## How to Use?
+## How to Develop?
 
 ### Local development
 
-1. First install dependencies, install code using `pnpm` in the root directory.
-2. Start the project: execute `pnpm run dev` in the root directory.
-3. Access the project address: `http://localhost:3000`.
+1. Add a new [.env](#environment-variables) file locally and configure the corresponding parameters.
+1. First install dependencies, install code using `pnpm i` in the root directory.
+1. Start the project: execute `npm run dev` in the root directory.
+1. Access the project address: `http://localhost:3000`.
 
 ### Get from Docker
 
@@ -78,23 +79,14 @@ docker run -d -p 3000:3000 -v ~/docker-data/.env:/ai-assistant/.env --name ai-as
 
 For more information about Docker, please refer to the [documentation](./DOCKERHELP.md).
 
-## How to Develop?
+## How to Use?
 
 ### Method 1: One-click Startup
 
-Execute `pnpm run dev` in the root directory.
+Execute `npm start` in the root directory.
 
 ### Method 2: Separate Front-end and Back-end Startup
 
 1. Start front-end:`pnpm run dev:fe`.
 2. Start back-end:`pnpm run dev:be`.
 3. Access front-end project address:`http://localhost:8000`.
-
-## TODO
-
-- [x] Stream output
-- [x] ~~Get account information~~
-- [x] Support switching to GPT-4
-- [x] Monorepo exploration
-- [ ] Chrome extension
-- [ ] i18n
