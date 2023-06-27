@@ -51,14 +51,24 @@ CUSTOM_COOKIE=
 
 ## 如何开发？
 
-### 本地开发
-
 1. 本地新增 [.env](#环境变量) 文件，配置相应参数。
 1. 首先安装依赖，`根目录`下安装依赖，使用 `pnpm i` 安装代码。
 1. 启动项目：根目录下执行`npm run dev`。
 1. 访问项目地址：`http://localhost:3000`
 
-### 从 docker 获取
+## 如何使用？
+
+### 方式一：一键启动
+
+在根目录下执行 `npm start`
+
+### 方式二：分前后端启动
+
+1. 启动前端：`npm run dev:fe`
+2. 启动后端：`npm run dev:be`
+3. 访问前端项目地址：`http://localhost:8000`
+
+### 方式三：从 docker 获取
 
 [从这里获取](https://hub.docker.com/r/cwy829/ai-assistant)
 
@@ -82,15 +92,3 @@ docker run -d -p 3001:3000 -v ~/docker-data/.env:/ai-assistant/.env --name ai-as
 ![docker run](Screenshots/docker-run.png)
 
 更多关于 docker 的知识，请查看 [文档](./DOCKERHELP_zh.md)
-
-## 如何使用？
-
-### 方式一：一键启动
-
-在根目录下执行 `npm start`
-
-### 方式二：分前后端启动
-
-1. 启动前端：`npm run dev:fe`
-2. 启动后端：`npm run dev:be`
-3. 访问前端项目地址：`http://localhost:8000`

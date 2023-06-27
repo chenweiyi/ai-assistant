@@ -52,14 +52,24 @@ CUSTOM_COOKIE=
 
 ## How to Develop?
 
-### Local development
-
 1. Add a new [.env](#environment-variables) file locally and configure the corresponding parameters.
 1. First install dependencies, install code using `pnpm i` in the root directory.
 1. Start the project: execute `npm run dev` in the root directory.
 1. Access the project address: `http://localhost:3000`.
 
-### Get from Docker
+## How to Use?
+
+### Method 1: One-click Startup
+
+Execute `npm start` in the root directory.
+
+### Method 2: Separate Front-end and Back-end Startup
+
+1. Start front-end:`pnpm run dev:fe`.
+2. Start back-end:`pnpm run dev:be`.
+3. Access front-end project address:`http://localhost:8000`.
+
+### Method 3: Get from Docker
 
 [Get from here](https://hub.docker.com/r/cwy829/ai-assistant)
 
@@ -83,15 +93,3 @@ docker run -d -p 3000:3000 -v ~/docker-data/.env:/ai-assistant/.env --name ai-as
 ![docker run](Screenshots/docker-run.png)
 
 For more information about Docker, please refer to the [documentation](./DOCKERHELP.md).
-
-## How to Use?
-
-### Method 1: One-click Startup
-
-Execute `npm start` in the root directory.
-
-### Method 2: Separate Front-end and Back-end Startup
-
-1. Start front-end:`pnpm run dev:fe`.
-2. Start back-end:`pnpm run dev:be`.
-3. Access front-end project address:`http://localhost:8000`.
