@@ -61,6 +61,8 @@ CUSTOM_COOKIE=
 
 ### Get from Docker
 
+[Get from here](https://hub.docker.com/r/cwy829/ai-assistant)
+
 #### Get Image
 
 ```
@@ -75,6 +77,10 @@ docker image pull cwy829/ai-assistant
 ```
 docker run -d -p 3000:3000 -v ~/docker-data/.env:/ai-assistant/.env --name ai-assistant cwy829/ai-assistant
 ```
+
+#### Docker client startup configuration
+
+![docker run](Screenshots/docker-run.png)
 
 For more information about Docker, please refer to the [documentation](./DOCKERHELP.md).
 
