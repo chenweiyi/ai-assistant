@@ -224,10 +224,9 @@ export default function IndexPage() {
   }
 
   function pressEnterHandler(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    // 按下ctrl ｜ command + enter发送消息
-    if (e.ctrlKey || e.metaKey) {
-      sendMsg(active?.sessionId as string)
-    }
+    if (e.shiftKey) return
+    e.preventDefault()
+    sendMsg(active?.sessionId as string)
   }
 
   // 聚焦输入框
