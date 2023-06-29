@@ -9,7 +9,11 @@
 > `-t` 表示镜像名
 
 ```
-docker build -t ai-assistant:0.0.1 .
+# 直接打标签
+docker build . -t ai-assistant:0.0.1
+
+# 选择指定的Dockerfile打镜像
+docker build . -f Dockerfile -t cwy829/ai-assistant:0.0.1
 ```
 
 ## 启动 Container

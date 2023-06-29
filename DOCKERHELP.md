@@ -9,7 +9,11 @@
 > `-t` represents the image name
 
 ```
-docker build -t ai-assistant:0.0.1 .
+# directly tag
+docker build . -t ai-assistant:0.0.1
+
+# Select the specified Dockerfile to build an image.
+docker build . -f Dockerfile -t cwy829/ai-assistant:0.0.1
 ```
 
 ## Start Container
