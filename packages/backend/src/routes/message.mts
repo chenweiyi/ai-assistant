@@ -1,8 +1,8 @@
 import MessageController from '../controller/message.mjs'
-import router from './index.mjs'
+import { router, routerChatgpt } from './index.mjs'
 
 router.all('/sendMsg/sse', MessageController.sendMsgSSE)
 
-router.post('/v1/completions', MessageController.completions)
+routerChatgpt.post('/v1/chat/completions', MessageController.completions)
 
-export default router
+export { router, routerChatgpt }

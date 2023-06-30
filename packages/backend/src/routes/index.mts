@@ -1,7 +1,10 @@
 import RouterEngine from '@koa/router'
 
 const router = new RouterEngine()
+const routerChatgpt = new RouterEngine()
 
 router.prefix('/q')
 
-export default router
+routerChatgpt.prefix('/v1')
+
+export { router, routerChatgpt }

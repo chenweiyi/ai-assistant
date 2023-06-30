@@ -57,8 +57,12 @@ export default defineConfig({
     }
   ],
   proxy: {
-    // 指标接口
     '/q': {
+      target: serviceUrl,
+      changeOrigin: true,
+      disableHostCheck: true
+    },
+    '/v1': {
       target: serviceUrl,
       changeOrigin: true,
       disableHostCheck: true

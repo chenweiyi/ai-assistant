@@ -247,7 +247,7 @@ export default class MessageController {
   }
 
   /**
-   * 模拟 chatgpt 官方 /v1/completions 接口
+   * 模拟 chatgpt 官方 /v1/chat/completions 接口
    * @param ctx
    */
   public static async completions(ctx: Koa.Context) {
