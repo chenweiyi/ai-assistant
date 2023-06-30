@@ -135,9 +135,10 @@ export default class MessageController {
       temperature,
       top_p
     } = ctx.request.query as any
-    debug('sendMsgSSE params', ctx.request.query, ctx.request.body)
+    debug('sendMsgSSE params', JSON.stringify(ctx.request.query))
     if (!chatgptApiMap.get(ownerId)) {
       const api = GenerateChatGPTAPI({
+        apiBaseUrl: process.env.OPENAI_API_BASE_URL || 'https://api.openai.com',
         apiKey: apiKey || process.env.OPENAI_API_KEY,
         completionParams: {
           model: model || 'gpt-3.5-turbo',

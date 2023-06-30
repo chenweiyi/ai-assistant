@@ -41,7 +41,8 @@ CUSTOM_COOKIE=
 
 ```
 
-- `OPENAI_API_KEY`: Indicates that official OpenAI APIs will be used to access chatgpt.
+- `OPENAI_API_BASE_URL`: Indicates the base URL used for chatgpt, which can also use a third-party self-built service address, such as the `endpoint` of [api2d](https://api2d.com/). The default value here is `https://api.openai.com/v1`.
+- `OPENAI_API_KEY`: Represents the official OpenAI [API key](https://platform.openai.com/account/api-keys) that will be used. Alternatively, you can use a third-party service key, such as [api2d](https://api2d.com/).
 - `PROXY_ADDRESS`: Scientific Internet access proxy configuration, for example: http://xxx.
 - `OPENAI_ACCESS_TOKEN`: OpenAI's [access_token](https://chat.openai.com/api/auth/session), The field usually use with `API_REVERSE_PROXY`，Indicates that unofficial APIs will be used to access chatgpt.
 - `API_REVERSE_PROXY`: Indicates available unofficial reverse proxies. By default it adopts "https://ai.fakeopen.com/api/conversation". For details please refer [transitive-bullshit 大佬](https://github.com/transitive-bullshit/chatgpt-api/tree/main#reverse-proxy).
