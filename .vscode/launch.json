@@ -16,7 +16,7 @@
     {
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "name": "nodemon",
+      "name": "调试后端",
       "program": "${workspaceFolder}/packages/backend/src/bin/www.mts",
       "request": "launch",
       "restart": true,

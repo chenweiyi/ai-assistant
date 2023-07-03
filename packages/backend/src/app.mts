@@ -11,7 +11,8 @@ import onerror from 'koa-onerror'
 import serve from 'koa-static'
 import path from 'path'
 
-import { router as message, routerChatgpt } from './routes/message.mjs'
+import { routerChatgpt } from './routes/completions.mjs'
+import { router as message } from './routes/message.mjs'
 import users from './routes/users.mjs'
 import conditional from './utils/koa-conditional-get.mjs'
 
