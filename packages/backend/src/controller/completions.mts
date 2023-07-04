@@ -206,6 +206,7 @@ export default class Completions {
     }
 
     const response = await axios(requestData)
+    let response_first = true
 
     debug('requst params', requestData)
 
@@ -243,11 +244,11 @@ export default class Completions {
               {
                 index: 0,
                 message: {
-                  role: '',
+                  role: response_first ? 'assistant' : '',
                   content: res.text || ''
                 },
                 delta: {
-                  role: '',
+                  role: response_first ? 'assistant' : '',
                   content: res.text || ''
                 },
                 finish_reason: ''
@@ -260,6 +261,7 @@ export default class Completions {
             }
           })
         )
+        response_first = false
       }
     })
 
