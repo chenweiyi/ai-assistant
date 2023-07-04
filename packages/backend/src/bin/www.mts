@@ -3,14 +3,22 @@
 /**
  * Module dependencies.
  */
+import * as dotenv from 'dotenv'
 import debugLibrary from 'debug'
 import http from 'http'
+import path from 'path'
 
 import app from '../app.mjs'
 import '../utils/abortControllerPolyfill.mjs'
 import '../utils/fetchPolyfill.mjs'
 
 const debug = debugLibrary('server')
+
+const config = dotenv.config({
+  path: path.resolve('..', '..', '.env')
+})
+
+debug('config', config)
 
 /**
  * Get port from environment and store in Express.

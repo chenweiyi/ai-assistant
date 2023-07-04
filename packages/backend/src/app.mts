@@ -1,4 +1,3 @@
-import * as dotenv from 'dotenv'
 import debugLibrary from 'debug'
 import Koa from 'koa'
 import cors from 'koa2-cors'
@@ -17,12 +16,6 @@ import users from './routes/users.mjs'
 import conditional from './utils/koa-conditional-get.mjs'
 
 const debug = debugLibrary('app')
-debug('.env:', path.resolve('..', '..', '.env'))
-dotenv.config({
-  path: path.resolve('..', '..', '.env')
-})
-
-const frontPath = path.resolve('..', 'frontend/dist')
 
 let app = new Koa()
 
@@ -68,7 +61,7 @@ app.use(async (ctx, next) => {
 })
 
 app.use(
-  serve(frontPath, {
+  serve(path.resolve('..', 'frontend/dist'), {
     // 设置cache-controll缓存时间
     maxage: 1000 * 60 * 60 * 2,
     // index.html禁止缓存
