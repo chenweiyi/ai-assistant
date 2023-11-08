@@ -17,18 +17,18 @@ RUN pnpm fetch --prod
 
 COPY . .
 
-RUN pnpm install -r --offline
+RUN pnpm i -r --offline
 
 RUN npm run build
 
 # 单独构建后台依赖
-FROM node:18-alpine3.14 AS backend-modules
+FROM base AS backend-modules
 
 WORKDIR /ai-assistant/packages/backend
 
 COPY packages/backend/package.json .
 
-RUN pnpm install --registry=https://registry.npm.taobao.org
+RUN pnpm i
 
 COPY packages/backend .
 
