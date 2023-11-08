@@ -19,41 +19,38 @@
 在根目录下，复制一个.env.example 文件重命名为.env，修改其中的字段：
 
 ```
-# Default is OpenAI API Base URL Or use a third-party self-built service address, such as the `endpoint` of api2d
-OPENAI_API_BASE_URL=
+# Server Port, eg: 3000
+SERVER_PORT=3000
 
-# Default is OpenAI API Key Or use a third-party self-built service address, such as the `endpoint` of api2d
+# TIMEOUT Time,eg: 2 * 60 * 1000
+CHATGPT_REQUEST_TIMEOUT=
+
+# OpenAI API Base URL - https://api.openai.com/docs
+# Or self-built service address, eg api2d: https://openai.api2d.net/v1
+OPENAI_API_BASE_URL =
+
+# OpenAI API Key - https://platform.openai.com/account/api-keys
+# Or self-built service key, eg api2d: fkxxx
 OPENAI_API_KEY=
 
-# PROXY_ADDRESS represents an http proxy. If left blank or not passed any value, it means that the http proxy is not enabled.
-PROXY_ADDRESS=
-
-# change this to an `accessToken` extracted from the ChatGPT site's `https://chat.openai.com/api/auth/session` response
-OPENAI_ACCESS_TOKEN=
-
-# Reverse Proxy - Available on accessToken
-# Default: https://ai.fakeopen.com/api/conversation
-# More: https://github.com/transitive-bullshit/chatgpt-api#reverse-proxy
-API_REVERSE_PROXY=
-
-# Third-party service API address
-CUSTOM_API_URL=
-# Third-party service API may need cookie
-CUSTOM_COOKIE=
+# CUSTOM_PROXY represents an http proxy. If left blank or not passed any value,
+# it means that the http proxy is not enabled.
+CUSTOM_PROXY=
 
 ```
 
 # OpenAI API Base URL, default is https://api.openai.com
 
-- `OPENAI_API_BASE_URL`: 表示使用的 chatgpt 官方的 baseUrl, 也可以使用第三方自建服务地址，比如[api2d](https://api2d.com/)的`endpoint`. 这里默认使用的是 `https://api.openai.com/v1`.
+- `OPENAI_API_BASE_URL`: 表示使用的 chatgpt 官方的 baseUrl, 也可以使用第三方自建服务地址，比如[api2d](https://openai.api2d.net/v1)的`endpoint`. 这里默认使用的是 `https://api.openai.com/v1`.
 - `OPENAI_API_KEY`: 表示会使用 openAI 的官方 [api-key](https://platform.openai.com/account/api-keys) , 也可以采用自建的第三方服务 key，比如[api2d](https://api2d.com/)
-- `PROXY_ADDRESS`: 科学上网的代理配置，比如：http://xxx
-- `OPENAI_ACCESS_TOKEN`: openAI 的 access_token, [这里](https://chat.openai.com/api/auth/session)是获取方式, 该字段通常和`API_REVERSE_PROXY`字段一起使用，表示会使用非官方 API 访问 chatgpt，如果配置了`OPENAI_API_KEY`字段，则当前字段不生效。
-- `API_REVERSE_PROXY`: 表示可用的非官方反向代理，默认采用 `https://ai.fakeopen.com/api/conversation` , 具体请参考[chatgpt-api](https://github.com/transitive-bullshit/chatgpt-api/tree/main#reverse-proxy)
-- `CUSTOM_API_URL`: 表示第三方服务地址
-- `CUSTOM_COOKIE`: 表示访问第三方服务可能需要的`cookie`字段信息
+- ~~`PROXY_ADDRESS`: 科学上网的代理配置，比如：http://xxx~~
+- ~~`OPENAI_ACCESS_TOKEN`: openAI 的 access_token, [这里](https://chat.openai.com/api/auth/session)是获取方式, 该字段通常和`API_REVERSE_PROXY`字段一起使用，表示会使用非官方 API 访问 chatgpt，如果配置了`OPENAI_API_KEY`字段，则当前字段不生效。~~
+- ~~`API_REVERSE_PROXY`: 表示可用的非官方反向代理，默认采用 `https://ai.fakeopen.com/api/conversation` , 具体请参考[chatgpt-api](https://github.com/transitive-bullshit/chatgpt-api/tree/main#reverse-proxy)~~
+- ~~`CUSTOM_API_URL`: 表示第三方服务地址~~
+- ~~`CUSTOM_COOKIE`: 表示访问第三方服务可能需要的`cookie`字段信息~~
+- `CUSTOM_PROXY`: 表示 http 代理，如果不配置，则表示没有使用 http 代理
 
-> 优先级：`OPENAI_API_KEY` > `OPENAI_ACCESS_TOKEN` > `CUSTOM_API_URL`。
+> ~~优先级：`OPENAI_API_KEY` > `OPENAI_ACCESS_TOKEN` > `CUSTOM_API_URL`。~~
 
 ## 如何开发？
 

@@ -132,7 +132,7 @@ export default function IndexPage() {
             sessionId
           )
           // 如果是error数据,则关闭EventSource
-          if (result.error && result.done) {
+          if (result.error || result.done) {
             source.close()
             return
           }

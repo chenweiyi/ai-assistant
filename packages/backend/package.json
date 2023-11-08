@@ -9,8 +9,8 @@
   },
   "scripts": {
     "dev": "nodemon ./src/bin/www.mts",
-    "debug": "cross-env DEBUG=\"server,custom,message,app\" nodemon ./src/bin/www.mts",
-    "start": "ts-node ./src/bin/www.mts",
+    "debug": "cross-env DEBUG=\"server,app,,service:*,controller:*\" nodemon ./src/bin/www.mts",
+    "start": "cross-env DEBUG=\"server,app,,service:*,controller:*\" ts-node ./src/bin/www.mts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf ./build",
     "build-ts": "tsc",

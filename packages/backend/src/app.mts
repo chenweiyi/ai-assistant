@@ -10,7 +10,6 @@ import onerror from 'koa-onerror'
 import serve from 'koa-static'
 import path from 'path'
 
-import { routerChatgpt } from './routes/completions.mjs'
 import { router as message } from './routes/message.mjs'
 import users from './routes/users.mjs'
 import conditional from './utils/koa-conditional-get.mjs'
@@ -79,7 +78,6 @@ app.use(
 // app.use(users.routes(), users.allowedMethods())
 app.use(users.routes()).use(users.allowedMethods())
 app.use(message.routes()).use(message.allowedMethods())
-app.use(routerChatgpt.routes()).use(routerChatgpt.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {

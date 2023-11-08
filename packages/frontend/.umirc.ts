@@ -1,9 +1,14 @@
+import * as dotenv from 'dotenv'
 import { defineConfig } from '@umijs/max'
+import path from 'path'
 
 import { autoImportPlugin } from './auto-import'
 
-const serviceUrl = process.env.CUSTOM_PROXY_URL
+const config: any = dotenv.config({
+  path: path.resolve('..', '..', '.env')
+})
 
+console.log('config:', config)
 // console.log('serviceUrl', serviceUrl)
 
 export default defineConfig({
@@ -58,12 +63,7 @@ export default defineConfig({
   ],
   proxy: {
     '/q': {
-      target: serviceUrl,
-      changeOrigin: true,
-      disableHostCheck: true
-    },
-    '/v1': {
-      target: serviceUrl,
+      target: `http://localhost:${config.parsed.SERVER_PORT}`,
       changeOrigin: true,
       disableHostCheck: true
     }
