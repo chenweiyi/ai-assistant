@@ -28,7 +28,7 @@ WORKDIR /ai-assistant/packages/backend
 
 COPY packages/backend/package.json .
 
-RUN npm install --production --registry=https://registry.npm.taobao.org
+RUN npm install --registry=https://registry.npm.taobao.org
 
 COPY packages/backend .
 
