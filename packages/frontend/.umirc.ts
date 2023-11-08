@@ -1,15 +1,20 @@
+import { existsSync } from 'node:fs'
+
 import * as dotenv from 'dotenv'
 import { defineConfig } from '@umijs/max'
 import path from 'path'
 
 import { autoImportPlugin } from './auto-import'
 
-const config: any = dotenv.config({
-  path: path.resolve('..', '..', '.env')
-})
+let serverPort = 3000
 
-console.log('config:', config)
-// console.log('serviceUrl', serviceUrl)
+if (existsSync('../../.env')) {
+  const config: any = dotenv.config({
+    path: path.resolve('..', '..', '.env')
+  })
+  // console.log('config:', config)
+  serverPort = +config.parsed.SERVER_PORT
+}
 
 export default defineConfig({
   hash: true,
@@ -63,7 +68,7 @@ export default defineConfig({
   ],
   proxy: {
     '/q': {
-      target: `http://localhost:${config.parsed.SERVER_PORT}`,
+      target: `http://localhost:${serverPort}`,
       changeOrigin: true,
       disableHostCheck: true
     }
