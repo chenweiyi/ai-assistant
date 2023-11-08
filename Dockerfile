@@ -13,7 +13,7 @@ WORKDIR /ai-assistant
 COPY pnpm-lock.yaml .
 
 # 这里这么写主要是缓存依赖，参考文档https://pnpm.io/zh/cli/fetch
-RUN pnpm fetch --prod
+RUN pnpm fetch
 
 COPY . .
 
