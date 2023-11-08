@@ -17,7 +17,7 @@ RUN pnpm fetch --prod
 
 COPY . .
 
-RUN pnpm install -r --offline --prod
+RUN pnpm install -r --offline
 
 RUN npm run build
 
@@ -28,7 +28,7 @@ WORKDIR /ai-assistant/packages/backend
 
 COPY packages/backend/package.json .
 
-RUN npm install --registry=https://registry.npm.taobao.org
+RUN pnpm install --registry=https://registry.npm.taobao.org
 
 COPY packages/backend .
 
