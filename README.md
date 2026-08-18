@@ -1,3 +1,5 @@
+
+
 [中文文档](./README_zh.md)
 
 # An AI Assistant
@@ -57,7 +59,7 @@ CUSTOM_PROXY=
 ## How to Develop?
 
 1. Add a new [.env](#environment-variables) file locally and configure the corresponding parameters.
-1. First install dependencies, install code using `pnpm i` in the root directory.
+1. First install dependencies using `pnpm i` in the root directory.
 1. Start the project: execute `npm run dev` in the root directory.
 1. Access the project address: `http://localhost:3000`.
 
